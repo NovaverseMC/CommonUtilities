@@ -1,0 +1,74 @@
+modules:
+    voidTeleport:
+        enabled: false
+        taskPeriod: 5
+        worlds:
+            world: 0.0
+        destinationWorld: "world"
+        destinationX: 0.0;
+        destinationY: 0.0;
+        destinationZ: 0.0;
+        destinationYaw: 0.0;
+        destinationPitch: 0.0;
+    teleportOnJoin:
+        enabled: false
+        destinationWorld: "world"
+        destinationX: 0.0;
+        destinationY: 0.0;
+        destinationZ: 0.0;
+        destinationYaw: 0.0;
+        destinationPitch: 0.0;
+    lockWeather:
+        enabled: false
+        worlds:
+            world: 0
+    joinFullPermission:
+        enabled: true
+    disableItemSwawp:
+        enabled: false
+    disableFireworkDamage:
+        enabled: false
+    disableFeatherBoardMessaging:
+        enabled: true
+    disableAttackCooldown:
+        enabled: false
+    disableAnnounceAdvancements:
+        enabled: true
+    customMessages:
+        enabled: false
+        hideJoinMessages: true
+        customJoinMessage: ""
+        hideLeaveMessages: true
+        customLeaveMessage: ""
+        hideDeathMessages: false
+        customDeathMessage: ""
+        customIdleKickMessage: ""
+    commandSecurity:
+        enabled: true
+        preventHiddenSytax: true
+        hiddenSyntaxMessage: "&fUnknown command."
+        commandBlacklist:
+            - "pl"
+            - "plugins"
+            - "ver"
+            - "version"
+            - "about"
+            - "?"
+            - "me"
+            - "kill"
+            - "plugman"
+            - "efly"
+            - "esethome"
+            - "etpa"
+            - "etpahere"
+            - "etpyes"
+            - "etpaccept"
+            - "etpno"
+            - "etpdeny"
+            - "etpdeny"
+            - "eheal"
+            - "ekit"
+            - "eback"
+            - "erepair"
+            - "ewarp"
+        blacklistMessage: "&cYou don't have the permission to perform this command!"
