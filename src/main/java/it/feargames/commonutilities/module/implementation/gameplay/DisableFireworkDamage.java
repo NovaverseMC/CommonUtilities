@@ -1,19 +1,19 @@
-package it.feargames.commonutilities.module.implementation;
+package it.feargames.commonutilities.module.implementation.gameplay;
 
 import it.feargames.commonutilities.annotation.ConfigValue;
 import it.feargames.commonutilities.annotation.RegisterListeners;
 import it.feargames.commonutilities.module.Module;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.bukkit.attribute.Attribute;
+import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 @RegisterListeners
-public class DisableAttackCooldown implements Module, Listener {
+public class DisableFireworkDamage implements Module, Listener {
 
     @ConfigValue
     private Boolean enabled = false;
@@ -23,9 +23,12 @@ public class DisableAttackCooldown implements Module, Listener {
         return enabled;
     }
 
-    @EventHandler(priority = EventPriority.HIGH)
-    public void onPlayerJoin(PlayerJoinEvent event) {
-        event.getPlayer().getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(32.0D);
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
+    public void onDamageByEntity(EntityDamageByEntityEvent event) {
+        if (event.getDamager().getType() != EntityType.FIREWORK) {
+            return;
+        }
+        event.setCancelled(true);
     }
 
 }

@@ -1,4 +1,4 @@
-package it.feargames.commonutilities.module.implementation;
+package it.feargames.commonutilities.module.implementation.gameplay;
 
 import com.comphenix.packetwrapper.WrapperPlayServerScoreboardTeam;
 import com.comphenix.protocol.PacketType;

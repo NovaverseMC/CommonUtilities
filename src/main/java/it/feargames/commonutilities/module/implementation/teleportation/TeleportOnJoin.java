@@ -1,4 +1,4 @@
-package it.feargames.commonutilities.module.implementation;
+package it.feargames.commonutilities.module.implementation.teleportation;
 
 import it.feargames.commonutilities.annotation.ConfigValue;
 import it.feargames.commonutilities.annotation.RegisterListeners;

@@ -1,4 +1,4 @@
-package it.feargames.commonutilities.module.implementation;
+package it.feargames.commonutilities.module.implementation.security;
 
 import com.google.common.collect.Lists;
 import it.feargames.commonutilities.annotation.ConfigValue;

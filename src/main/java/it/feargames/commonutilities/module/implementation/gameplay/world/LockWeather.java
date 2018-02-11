@@ -1,4 +1,4 @@
-package it.feargames.commonutilities.module.implementation;
+package it.feargames.commonutilities.module.implementation.gameplay.world;
 
 import com.google.common.collect.ImmutableMap;
 import it.feargames.commonutilities.annotation.ConfigValue;
