@@ -4,10 +4,12 @@ import it.feargames.commonutilities.CommonUtilities;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.World;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.RegisteredServiceProvider;
+import org.bukkit.plugin.messaging.PluginMessageListener;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.Collection;
@@ -23,12 +25,36 @@ public class PluginService {
         plugin.getServer().broadcast(message, permission);
     }
 
-    public void registerListener(@NonNull Listener listener) {
-        plugin.getServer().getPluginManager().registerEvents(listener, plugin);
+    public void dispatchCommand(CommandSender sender, String command) {
+        plugin.getServer().dispatchCommand(sender, command);
+    }
+
+    public void dispatchCommand(String command) {
+        plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), command);
     }
 
     public <T> RegisteredServiceProvider<T> getService(Class<T> service) {
         return plugin.getServer().getServicesManager().getRegistration(service);
+    }
+
+    public void registerIncomingPluginChannel(String channel, PluginMessageListener listener) {
+        plugin.getServer().getMessenger().registerIncomingPluginChannel(plugin, channel, listener);
+    }
+
+    public void registerOutgoingPluginChannel(String channel) {
+        plugin.getServer().getMessenger().unregisterOutgoingPluginChannel(plugin, channel);
+    }
+
+    public void unregisterIncomingPluginChannel(String channel) {
+        plugin.getServer().getMessenger().unregisterIncomingPluginChannel(plugin, channel);
+    }
+
+    public void unregisterOutgoingPluginChannel(String channel) {
+        plugin.getServer().getMessenger().registerOutgoingPluginChannel(plugin, channel);
+    }
+
+    public void registerListener(@NonNull Listener listener) {
+        plugin.getServer().getPluginManager().registerEvents(listener, plugin);
     }
 
     public void unregisterListener(@NonNull Listener listener) {

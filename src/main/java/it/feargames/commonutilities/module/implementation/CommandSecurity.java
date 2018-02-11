@@ -90,8 +90,10 @@ public class CommandSecurity implements Module, Listener {
         }
 
         for (String currentCommand : commandBlacklist) {
-            event.setCancelled(true);
-            return;
+            if (label.equalsIgnoreCase("/" + currentCommand)) {
+                event.setCancelled(true);
+                return;
+            }
         }
     }
 }
