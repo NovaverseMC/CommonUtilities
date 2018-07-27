@@ -20,7 +20,6 @@ import java.util.Set;
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 @RegisterCommands
 @CommandPermission("common.raid")
-@Description("Start or continue an existing raid")
 @CommandAlias("raid")
 public class Raid extends BaseCommand implements Module {
 
@@ -47,12 +46,14 @@ public class Raid extends BaseCommand implements Module {
     }
 
     @Subcommand("start")
+    @Description("Start a new raid")
     public void onRaidStart(CommandSender sender) {
         raidCheckedPlayers = new HashSet<>();
         service.broadcast(ChatColor.GREEN + "Server data (functions, advancements, etc...) reloaded!", "common.raid");
     }
 
     @Subcommand("next")
+    @Description("Continue the current raid")
     public void onRaidStart(Player player) {
         if (raidCheckedPlayers == null) {
             player.sendMessage(ChatColor.RED + "You have firstly to start a raid!");
@@ -76,5 +77,4 @@ public class Raid extends BaseCommand implements Module {
         sender.sendMessage("---- CommonUtilities Raid ----");
         help.showHelp();
     }
-
 }

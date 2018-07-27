@@ -39,7 +39,7 @@ public class ProtocolServiceWrapper {
 
     public void cleanup() {
         // Can't use lambda there as it would trigger a class lookup and cause an exception if ProtocolLib isn't installed
-        if(getProtocolService().isPresent()) {
+        if (getProtocolService().isPresent()) {
             getProtocolService().get().unregisterAll();
         }
     }

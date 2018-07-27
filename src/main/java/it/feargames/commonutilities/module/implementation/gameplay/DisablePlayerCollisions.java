@@ -10,15 +10,14 @@ import it.feargames.commonutilities.service.PluginService;
 import it.feargames.commonutilities.service.ProtocolServiceWrapper;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang.RandomStringUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 
 import java.util.Collections;
-import java.util.UUID;
 
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 @RegisterListeners
@@ -39,6 +38,7 @@ public class DisablePlayerCollisions implements Module, Listener {
     @Override
     public void onEnable() {
         wrapper.getProtocolService().ifPresent(protocol -> {
+            // Protocol docs: http://wiki.vg/Protocol#Teams
             protocol.addSendingListener(LISTENER_ID, ListenerPriority.HIGHEST, PacketType.Play.Server.SCOREBOARD_TEAM, event -> {
                 WrapperPlayServerScoreboardTeam wrapper = new WrapperPlayServerScoreboardTeam(event.getPacket());
                 wrapper.setCollisionRule("never");
@@ -49,7 +49,6 @@ public class DisablePlayerCollisions implements Module, Listener {
 
     @Override
     public void onDisable() {
-
     }
 
     @Override
@@ -58,14 +57,15 @@ public class DisablePlayerCollisions implements Module, Listener {
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
-    public void onItemSwap(PlayerJoinEvent event) {
+    public void onPlayerJoin(PlayerJoinEvent event) {
         final Player player = event.getPlayer();
-        WrapperPlayServerScoreboardTeam wrapper = new WrapperPlayServerScoreboardTeam();
-        wrapper.setMode(WrapperPlayServerScoreboardTeam.Mode.TEAM_CREATED);
-        wrapper.setName(UUID.randomUUID().toString().substring(0, 15));
-        wrapper.setPlayers(Collections.singletonList(player.getName()));
-        wrapper.setCollisionRule("never");
-        wrapper.sendPacket(player);
+        // Protocol docs: http://wiki.vg/Protocol#Teams
+        wrapper.getProtocolService().ifPresent(protocol -> {
+            WrapperPlayServerScoreboardTeam wrapper = new WrapperPlayServerScoreboardTeam();
+            wrapper.setName(RandomStringUtils.random(16, true, true));
+            wrapper.setMode(WrapperPlayServerScoreboardTeam.Mode.TEAM_CREATED);
+            wrapper.setCollisionRule("never");
+            wrapper.setPlayers(Collections.singletonList(player.getName()));
+        });
     }
-
 }
