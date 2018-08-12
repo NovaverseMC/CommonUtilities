@@ -49,6 +49,7 @@ public class DisablePlayerCollisions implements Module, Listener {
 
     @Override
     public void onDisable() {
+        wrapper.getProtocolService().ifPresent(protocol -> protocol.removePacketListener(LISTENER_ID));
     }
 
     @Override
