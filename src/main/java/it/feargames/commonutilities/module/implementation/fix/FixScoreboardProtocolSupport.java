@@ -3,14 +3,13 @@ package it.feargames.commonutilities.module.implementation.fix;
 import com.comphenix.packetwrapper.WrapperPlayServerScoreboardTeam;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.ListenerPriority;
+import com.comphenix.protocol.wrappers.ComponentConverter;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
-import com.google.gson.JsonParser;
 import it.feargames.commonutilities.annotation.ConfigValue;
 import it.feargames.commonutilities.annotation.RegisterListeners;
 import it.feargames.commonutilities.module.Module;
 import it.feargames.commonutilities.service.PluginService;
 import it.feargames.commonutilities.service.ProtocolServiceWrapper;
-import it.feargames.commonutilities.util.ReflectionUtils;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import net.md_5.bungee.api.ChatColor;
@@ -20,9 +19,9 @@ import org.bukkit.event.Listener;
 
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 @RegisterListeners
-public class FixFeatherbardProtocolSupport implements Module, Listener {
+public class FixScoreboardProtocolSupport implements Module, Listener {
 
-    private final static String LISTENER_ID = "FixFeatherboardProtocolSupport";
+    private final static String LISTENER_ID = "FixScoreboardProtocolSupport";
 
     private ProtocolServiceWrapper wrapper;
 
@@ -50,13 +49,12 @@ public class FixFeatherbardProtocolSupport implements Module, Listener {
         wrapper.getProtocolService().ifPresent(protocol -> {
             // Protocol docs: http://wiki.vg/Protocol#Teams
             protocol.addSendingListener(LISTENER_ID, ListenerPriority.HIGHEST, PacketType.Play.Server.SCOREBOARD_TEAM, event -> {
-                if(!ReflectionUtils.getStackTraceElement(24).getClassName().equals("be.maximvdw.featherboard.dm")) {
-                    return; // Catch only FeatherBoard packets.
-                }
-
                 final WrapperPlayServerScoreboardTeam wrapper = new WrapperPlayServerScoreboardTeam(event.getPacket());
-                final String rawMessage = new JsonParser().parse(wrapper.getPrefix().getJson()).getAsJsonObject().get("text").getAsString();
-                final BaseComponent[] messageComponents = TextComponent.fromLegacyText(rawMessage);
+
+                // Reparse, prevent mixed legacy-component formats
+                String scoreBuilder = BaseComponent.toLegacyText(ComponentConverter.fromWrapper(wrapper.getPrefix())) +
+                        BaseComponent.toLegacyText(ComponentConverter.fromWrapper(wrapper.getSuffix()));
+                final BaseComponent[] messageComponents = TextComponent.fromLegacyText(scoreBuilder);
 
                 final StringBuilder prefixBuilder = new StringBuilder(16);
                 boolean useSuffix = false;

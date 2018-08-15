@@ -11,7 +11,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
-import org.bukkit.event.server.TabCompleteEvent;
 
 import java.util.List;
 
@@ -66,6 +65,7 @@ public class CommandSecurity implements Module, Listener {
         }
     }
 
+    /* Useless in 1.13
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
     public void onTabComplete(TabCompleteEvent event) {
         if (!(event.getSender() instanceof Player)) {
@@ -96,4 +96,5 @@ public class CommandSecurity implements Module, Listener {
             }
         }
     }
+    */
 }

@@ -4,10 +4,9 @@ import it.feargames.commonutilities.module.ModuleManager;
 import it.feargames.commonutilities.service.CommandService;
 import it.feargames.commonutilities.service.PluginService;
 import it.feargames.commonutilities.service.ProtocolServiceWrapper;
-import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public final class CommonUtilities extends JavaPlugin implements Listener {
+public final class CommonUtilities extends JavaPlugin {
 
     private PluginService service;
     private CommandService commands;
@@ -37,5 +36,4 @@ public final class CommonUtilities extends JavaPlugin implements Listener {
         moduleManager.disableModules();
         protocol.cleanup();
     }
-
 }
