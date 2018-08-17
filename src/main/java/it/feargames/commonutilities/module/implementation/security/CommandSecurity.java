@@ -1,9 +1,14 @@
 package it.feargames.commonutilities.module.implementation.security;
 
+import com.comphenix.packetwrapper.WrapperPlayClientTabComplete;
+import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.events.ListenerPriority;
 import com.google.common.collect.Lists;
 import it.feargames.commonutilities.annotation.ConfigValue;
 import it.feargames.commonutilities.annotation.RegisterListeners;
 import it.feargames.commonutilities.module.Module;
+import it.feargames.commonutilities.service.PluginService;
+import it.feargames.commonutilities.service.ProtocolServiceWrapper;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.bukkit.entity.Player;
@@ -20,10 +25,14 @@ import static org.bukkit.ChatColor.translateAlternateColorCodes;
 @RegisterListeners
 public class CommandSecurity implements Module, Listener {
 
+    private final static String LISTENER_ID = "FixHideTabLegacy";
+
     @ConfigValue
     private Boolean enabled = true;
     @ConfigValue
     private Boolean preventHiddenSyntax = true;
+    @ConfigValue
+    private Boolean preventEmptyTab = true;
     @ConfigValue
     private String hiddenSyntaxMessage = "&fUnknown command.";
     @ConfigValue
@@ -31,9 +40,55 @@ public class CommandSecurity implements Module, Listener {
     @ConfigValue
     private String blacklistMessage = "&cYou don't have the permission to perform this command!";
 
+    private ProtocolServiceWrapper protocol;
+
     @Override
-    public boolean isEnabled() {
-        return enabled;
+    public void onLoad(String name, PluginService service, ProtocolServiceWrapper protocol) {
+        this.protocol = protocol;
+    }
+
+    @Override
+    public void onEnable() {
+        // Tab listener (legacy clients, while using ProtocolSupport/ViaBackwars/ViaRewind)
+        protocol.getProtocolService().ifPresent(protocol -> {
+            protocol.addReceivingListener(LISTENER_ID, ListenerPriority.HIGHEST, PacketType.Play.Client.TAB_COMPLETE, event -> {
+                final Player player = event.getPlayer();
+                final WrapperPlayClientTabComplete wrapper = new WrapperPlayClientTabComplete(event.getPacket());
+
+                if (player.hasPermission("common.command.bypass")) {
+                    return;
+                }
+
+                String message = wrapper.getInput();
+
+                if (preventEmptyTab && message.isEmpty()) {
+                    event.setCancelled(true);
+                    return;
+                }
+
+                String[] components = message.split(" ");
+                String label = components[0];
+
+                if (preventHiddenSyntax) {
+                    if (label.contains(":")) {
+                        event.setCancelled(true);
+                        return;
+                    }
+                }
+
+                for (String currentCommand : commandBlacklist) {
+                    if (label.equalsIgnoreCase(currentCommand)) {
+                        event.setCancelled(true);
+                        return;
+                    }
+                }
+            });
+        });
+    }
+
+    @Override
+    public void onDisable() {
+        protocol.getProtocolService().ifPresent(protocol -> protocol.removePacketListener(LISTENER_ID));
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
@@ -65,36 +120,8 @@ public class CommandSecurity implements Module, Listener {
         }
     }
 
-    /* Useless in 1.13
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
-    public void onTabComplete(TabCompleteEvent event) {
-        if (!(event.getSender() instanceof Player)) {
-            return;
-        }
-
-        final Player player = (Player) event.getSender();
-
-        if (player.hasPermission("common.command.bypass")) {
-            return;
-        }
-
-        String message = event.getBuffer();
-        String[] components = message.split(" ");
-        String label = components[0];
-
-        if (preventHiddenSyntax) {
-            if (label.contains(":")) {
-                event.setCancelled(true);
-                return;
-            }
-        }
-
-        for (String currentCommand : commandBlacklist) {
-            if (label.equalsIgnoreCase("/" + currentCommand)) {
-                event.setCancelled(true);
-                return;
-            }
-        }
+    @Override
+    public boolean isEnabled() {
+        return enabled;
     }
-    */
 }

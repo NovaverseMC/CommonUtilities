@@ -6,7 +6,6 @@ import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.wrappers.ComponentConverter;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import it.feargames.commonutilities.annotation.ConfigValue;
-import it.feargames.commonutilities.annotation.RegisterListeners;
 import it.feargames.commonutilities.module.Module;
 import it.feargames.commonutilities.service.PluginService;
 import it.feargames.commonutilities.service.ProtocolServiceWrapper;
@@ -15,11 +14,9 @@ import lombok.NoArgsConstructor;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.event.Listener;
 
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
-@RegisterListeners
-public class FixScoreboardProtocolSupport implements Module, Listener {
+public class FixScoreboardProtocolSupport implements Module {
 
     private final static String LISTENER_ID = "FixScoreboardProtocolSupport";
 
@@ -48,8 +45,12 @@ public class FixScoreboardProtocolSupport implements Module, Listener {
     public void onEnable() {
         wrapper.getProtocolService().ifPresent(protocol -> {
             // Protocol docs: http://wiki.vg/Protocol#Teams
-            protocol.addSendingListener(LISTENER_ID, ListenerPriority.HIGHEST, PacketType.Play.Server.SCOREBOARD_TEAM, event -> {
+            protocol.addSendingListener(LISTENER_ID, ListenerPriority.HIGH, PacketType.Play.Server.SCOREBOARD_TEAM, event -> {
                 final WrapperPlayServerScoreboardTeam wrapper = new WrapperPlayServerScoreboardTeam(event.getPacket());
+                if(wrapper.getMode() != WrapperPlayServerScoreboardTeam.Mode.TEAM_CREATED
+                        && wrapper.getMode() != WrapperPlayServerScoreboardTeam.Mode.TEAM_UPDATED) {
+                    return;
+                }
 
                 // Reparse, prevent mixed legacy-component formats
                 String scoreBuilder = BaseComponent.toLegacyText(ComponentConverter.fromWrapper(wrapper.getPrefix())) +

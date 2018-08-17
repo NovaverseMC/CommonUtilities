@@ -25,31 +25,37 @@ public class DisablePlayerCollisions implements Module, Listener {
 
     private final static String LISTENER_ID = "DisablePlayerCollisions";
 
-    private ProtocolServiceWrapper wrapper;
+    private PluginService service;
+    private ProtocolServiceWrapper protocol;
 
     @ConfigValue
     private Boolean enabled = true;
 
     @Override
-    public void onLoad(String name, PluginService service, ProtocolServiceWrapper wrapper) {
-        this.wrapper = wrapper;
+    public void onLoad(String name, PluginService service, ProtocolServiceWrapper protocol) {
+        this.service = service;
+        this.protocol = protocol;
     }
 
     @Override
     public void onEnable() {
-        wrapper.getProtocolService().ifPresent(protocol -> {
+        protocol.getProtocolService().ifPresent(protocol -> {
             // Protocol docs: http://wiki.vg/Protocol#Teams
             protocol.addSendingListener(LISTENER_ID, ListenerPriority.HIGHEST, PacketType.Play.Server.SCOREBOARD_TEAM, event -> {
                 WrapperPlayServerScoreboardTeam wrapper = new WrapperPlayServerScoreboardTeam(event.getPacket());
+                if (wrapper.getMode() != WrapperPlayServerScoreboardTeam.Mode.TEAM_CREATED
+                        && wrapper.getMode() != WrapperPlayServerScoreboardTeam.Mode.TEAM_UPDATED) {
+                    return;
+                }
                 wrapper.setCollisionRule("never");
-                event.setPacket(wrapper.getHandle());
             });
         });
+        service.getPlayers().forEach(this::sendTeamPacket);
     }
 
     @Override
     public void onDisable() {
-        wrapper.getProtocolService().ifPresent(protocol -> protocol.removePacketListener(LISTENER_ID));
+        protocol.getProtocolService().ifPresent(protocol -> protocol.removePacketListener(LISTENER_ID));
     }
 
     @Override
@@ -59,14 +65,18 @@ public class DisablePlayerCollisions implements Module, Listener {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
     public void onPlayerJoin(PlayerJoinEvent event) {
-        final Player player = event.getPlayer();
+        sendTeamPacket(event.getPlayer());
+    }
+
+    private void sendTeamPacket(final Player player) {
         // Protocol docs: http://wiki.vg/Protocol#Teams
-        wrapper.getProtocolService().ifPresent(protocol -> {
+        protocol.getProtocolService().ifPresent(protocol -> {
             WrapperPlayServerScoreboardTeam wrapper = new WrapperPlayServerScoreboardTeam();
             wrapper.setName(RandomStringUtils.random(16, true, true));
             wrapper.setMode(WrapperPlayServerScoreboardTeam.Mode.TEAM_CREATED);
             wrapper.setCollisionRule("never");
             wrapper.setPlayers(Collections.singletonList(player.getName()));
+            wrapper.sendPacket(player);
         });
     }
 }
