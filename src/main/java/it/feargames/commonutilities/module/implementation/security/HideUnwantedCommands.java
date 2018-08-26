@@ -1,5 +1,6 @@
 package it.feargames.commonutilities.module.implementation.security;
 
+import com.comphenix.packetwrapper.WrapperPlayServerCommands;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.ListenerPriority;
 import com.google.common.collect.Lists;
@@ -43,18 +44,17 @@ public class HideUnwantedCommands implements Module {
     @Override
     public void onEnable() {
         wrapper.getProtocolService().ifPresent(protocol -> {
-            // Protocol docs: http://wiki.vg/Protocol#Teams
             protocol.addSendingListener(LISTENER_ID, ListenerPriority.HIGHEST, PacketType.Play.Server.COMMANDS, event -> {
-                Object commandsPacket = event.getPacket().getHandle();
-                try {
-                    RootCommandNode<?> rootNode = (RootCommandNode<?>) FieldUtils.readDeclaredField(commandsPacket, "a", true);
-                    Map<String, CommandNode<?>> children = Maps.newLinkedHashMap();
-                    for (CommandNode<?> node : rootNode.getChildren()) {
-                        if (commandBlacklist.contains(node.getName())) {
-                            continue;
-                        }
-                        children.put(node.getName(), node);
+                WrapperPlayServerCommands wrapper = new WrapperPlayServerCommands(event.getPacket());
+                RootCommandNode<?> rootNode = wrapper.getRoot();
+                Map<String, CommandNode<?>> children = Maps.newLinkedHashMap();
+                for (CommandNode<?> node : rootNode.getChildren()) {
+                    if (commandBlacklist.contains(node.getName())) {
+                        continue;
                     }
+                    children.put(node.getName(), node);
+                }
+                try {
                     FieldUtils.writeField(rootNode, "children", children, true);
                 } catch (IllegalArgumentException | IllegalAccessException e) {
                     log.log(Level.WARNING, "Unable to handle the Commands packet!", e);
