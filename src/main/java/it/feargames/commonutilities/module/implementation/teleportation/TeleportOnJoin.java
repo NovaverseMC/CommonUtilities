@@ -8,6 +8,7 @@ import it.feargames.commonutilities.service.ProtocolServiceWrapper;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -21,6 +22,8 @@ public class TeleportOnJoin implements Module, Listener {
 
     @ConfigValue
     private Boolean enabled = false;
+    @ConfigValue
+    private Boolean useRespawn = true;
     @ConfigValue
     private String destinationWorld = "world";
     @ConfigValue
@@ -46,9 +49,14 @@ public class TeleportOnJoin implements Module, Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerJoin(PlayerJoinEvent event) {
-        Location location = new Location(service.getWorld(destinationWorld), destinationX, destinationY,
+        final Player player = event.getPlayer();
+        if(useRespawn) {
+            player.spigot().respawn();
+            return;
+        }
+        final Location location = new Location(service.getWorld(destinationWorld), destinationX, destinationY,
                 destinationZ, destinationYaw, destinationPitch);
-        service.schedule(() -> event.getPlayer().teleport(location));
+        player.teleport(location);
     }
 
 }

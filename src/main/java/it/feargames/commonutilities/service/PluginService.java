@@ -109,4 +109,12 @@ public class PluginService {
         return asyncTimer(runnable, 0L, period);
     }
 
+    public void showPlayer(Player player, Player other) {
+        player.showPlayer(plugin, other);
+    }
+
+    public void hidePlayer(Player player, Player other) {
+        player.hidePlayer(plugin, other);
+    }
+
 }
