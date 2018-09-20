@@ -43,7 +43,7 @@ public class FixScoreboardProtocolSupport implements Module {
 
     @Override
     public void onEnable() {
-        wrapper.getProtocolService().ifPresent(protocol -> {
+        wrapper.handle(protocol -> {
             // Protocol docs: http://wiki.vg/Protocol#Teams
             protocol.addSendingListener(LISTENER_ID, ListenerPriority.HIGH, PacketType.Play.Server.SCOREBOARD_TEAM, event -> {
                 final WrapperPlayServerScoreboardTeam wrapper = new WrapperPlayServerScoreboardTeam(event.getPacket());
@@ -91,7 +91,7 @@ public class FixScoreboardProtocolSupport implements Module {
 
     @Override
     public void onDisable() {
-        wrapper.getProtocolService().ifPresent(protocol -> protocol.removePacketListener(LISTENER_ID));
+        wrapper.handle(protocol -> protocol.removePacketListener(LISTENER_ID));
     }
 
     @Override

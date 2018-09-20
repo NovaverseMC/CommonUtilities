@@ -50,7 +50,7 @@ public class CommandSecurity implements Module, Listener {
     @Override
     public void onEnable() {
         // Tab listener (legacy clients, while using ProtocolSupport/ViaBackwars/ViaRewind)
-        protocol.getProtocolService().ifPresent(protocol -> {
+        protocol.handle(protocol -> {
             protocol.addReceivingListener(LISTENER_ID, ListenerPriority.HIGHEST, PacketType.Play.Client.TAB_COMPLETE, event -> {
                 final Player player = event.getPlayer();
                 final WrapperPlayClientTabComplete wrapper = new WrapperPlayClientTabComplete(event.getPacket());
@@ -88,7 +88,7 @@ public class CommandSecurity implements Module, Listener {
 
     @Override
     public void onDisable() {
-        protocol.getProtocolService().ifPresent(protocol -> protocol.removePacketListener(LISTENER_ID));
+        protocol.handle(protocol -> protocol.removePacketListener(LISTENER_ID));
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)

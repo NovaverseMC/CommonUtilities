@@ -8,22 +8,24 @@ import it.feargames.commonutilities.service.ProtocolServiceWrapper;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.bukkit.Location;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 
 @RegisterListeners
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
-public class TeleportOnJoin implements Module, Listener {
+public class Spawn implements Module, Listener {
 
     private PluginService service;
 
     @ConfigValue
     private Boolean enabled = false;
     @ConfigValue
-    private Boolean useRespawn = true;
+    private Boolean onJoin = true;
+    @ConfigValue
+    private Boolean onRespawn = true;
     @ConfigValue
     private String destinationWorld = "world";
     @ConfigValue
@@ -47,16 +49,25 @@ public class TeleportOnJoin implements Module, Listener {
         return enabled;
     }
 
+    private Location getLocation() {
+        return new Location(service.getWorld(destinationWorld), destinationX, destinationY,
+                destinationZ, destinationYaw, destinationPitch);
+    }
+
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerJoin(PlayerJoinEvent event) {
-        final Player player = event.getPlayer();
-        if(useRespawn) {
-            player.spigot().respawn();
+        if (!onJoin) {
             return;
         }
-        final Location location = new Location(service.getWorld(destinationWorld), destinationX, destinationY,
-                destinationZ, destinationYaw, destinationPitch);
-        player.teleport(location);
+        event.getPlayer().teleport(getLocation());
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onRespawn(PlayerRespawnEvent event) {
+        if (!onRespawn) {
+            return;
+        }
+        event.setRespawnLocation(getLocation());
     }
 
 }

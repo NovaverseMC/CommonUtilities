@@ -43,7 +43,7 @@ public class HideUnwantedCommands implements Module {
 
     @Override
     public void onEnable() {
-        wrapper.getProtocolService().ifPresent(protocol -> {
+        wrapper.handle(protocol -> {
             protocol.addSendingListener(LISTENER_ID, ListenerPriority.HIGHEST, PacketType.Play.Server.COMMANDS, event -> {
                 WrapperPlayServerCommands wrapper = new WrapperPlayServerCommands(event.getPacket());
                 RootCommandNode<?> rootNode = wrapper.getRoot();
@@ -66,7 +66,7 @@ public class HideUnwantedCommands implements Module {
 
     @Override
     public void onDisable() {
-        wrapper.getProtocolService().ifPresent(protocol -> protocol.removePacketListener(LISTENER_ID));
+        wrapper.handle(protocol -> protocol.removePacketListener(LISTENER_ID));
     }
 
     @Override

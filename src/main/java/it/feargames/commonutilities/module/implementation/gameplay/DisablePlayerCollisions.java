@@ -39,7 +39,7 @@ public class DisablePlayerCollisions implements Module, Listener {
 
     @Override
     public void onEnable() {
-        protocol.getProtocolService().ifPresent(protocol -> {
+        protocol.handle(protocol -> {
             // Protocol docs: http://wiki.vg/Protocol#Teams
             protocol.addSendingListener(LISTENER_ID, ListenerPriority.HIGHEST, PacketType.Play.Server.SCOREBOARD_TEAM, event -> {
                 WrapperPlayServerScoreboardTeam wrapper = new WrapperPlayServerScoreboardTeam(event.getPacket());
@@ -55,7 +55,7 @@ public class DisablePlayerCollisions implements Module, Listener {
 
     @Override
     public void onDisable() {
-        protocol.getProtocolService().ifPresent(protocol -> protocol.removePacketListener(LISTENER_ID));
+        protocol.handle(protocol -> protocol.removePacketListener(LISTENER_ID));
     }
 
     @Override
@@ -70,7 +70,7 @@ public class DisablePlayerCollisions implements Module, Listener {
 
     private void sendTeamPacket(final Player player) {
         // Protocol docs: http://wiki.vg/Protocol#Teams
-        protocol.getProtocolService().ifPresent(protocol -> {
+        protocol.handle(protocol -> {
             WrapperPlayServerScoreboardTeam wrapper = new WrapperPlayServerScoreboardTeam();
             wrapper.setName(RandomStringUtils.random(16, true, true));
             wrapper.setMode(WrapperPlayServerScoreboardTeam.Mode.TEAM_CREATED);

@@ -27,8 +27,11 @@ public class ProtocolServiceWrapper {
 
     private ProtocolService protocolService = null;
 
-    public Optional<ProtocolService> getProtocolService() {
-        return Optional.ofNullable(protocolService);
+    // Can't return optional + lambdas as they would trigger a class lookup and cause an exception if ProtocolLib isn't installed
+    public void handle(Consumer<ProtocolService> handler) {
+        if(protocolService != null) {
+            handler.accept(protocolService);
+        }
     }
 
     public void initialize() {
@@ -38,10 +41,7 @@ public class ProtocolServiceWrapper {
     }
 
     public void cleanup() {
-        // Can't use lambda there as it would trigger a class lookup and cause an exception if ProtocolLib isn't installed
-        if (getProtocolService().isPresent()) {
-            getProtocolService().get().unregisterAll();
-        }
+        handle(ProtocolService::unregisterAll);
     }
 
     @NoArgsConstructor(access = AccessLevel.PRIVATE)

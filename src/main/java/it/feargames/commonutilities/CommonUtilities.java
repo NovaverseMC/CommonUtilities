@@ -20,7 +20,7 @@ public final class CommonUtilities extends JavaPlugin {
         service = new PluginService(this);
         commands = new CommandService();
         protocol = new ProtocolServiceWrapper(this, service);
-        moduleManager = new ModuleManager(getConfig().getConfigurationSection("modules"), service, commands, protocol);
+        moduleManager = new ModuleManager(getConfig().createSection("modules"), service, commands, protocol);
         moduleManager.loadInternalModules(this::saveConfig);
     }
 
