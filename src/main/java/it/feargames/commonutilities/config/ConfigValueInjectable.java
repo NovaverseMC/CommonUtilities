@@ -6,18 +6,19 @@ import org.apache.commons.lang.reflect.FieldUtils;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicBoolean;
-
-import static org.reflections.ReflectionUtils.getFields;
-import static org.reflections.ReflectionUtils.withAnnotation;
 
 public interface ConfigValueInjectable {
 
     @SuppressWarnings("unchecked")
     default void injectConfig(@NonNull final ConfigurationSection configuration, final Runnable onDefaultSave) {
         AtomicBoolean updated = new AtomicBoolean(false);
-        getFields(this.getClass(), withAnnotation(ConfigValue.class)).forEach(field -> {
+        Arrays.asList(getClass().getDeclaredFields()).forEach(field -> {
             ConfigValue annotation = field.getAnnotation(ConfigValue.class);
+            if (annotation == null) {
+                return;
+            }
             ConfigValue.ValueType type = annotation.type() == ConfigValue.ValueType.AUTO ?
                     ConfigValue.ValueType.getType(field) : annotation.type();
             if (type == null) {

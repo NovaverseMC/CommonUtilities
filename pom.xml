@@ -18,6 +18,12 @@
 
     <build>
         <defaultGoal>clean package</defaultGoal>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <version>3.8.0</version>
@@ -26,57 +32,46 @@
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
-                    <optimize>true</optimize>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.1.1</version>
+                <version>3.2.0</version>
+                <configuration>
+                    <relocations>
+                        <relocation>
+                            <pattern>co.aikar.commands</pattern>
+                            <shadedPattern>shaded.co.aikar.commands</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>com.comphenix.packetwrapper</pattern>
+                            <shadedPattern>shaded.com.comphenix.packetwrapper</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>javassist</pattern>
+                            <shadedPattern>shaded.javassist</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>net.jodah.expiringmap</pattern>
+                            <shadedPattern>shaded.net.jodah.expiringmap</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>org.reflections</pattern>
+                            <shadedPattern>shaded.org.reflections</shadedPattern>
+                        </relocation>
+                    </relocations>
+                </configuration>
                 <executions>
                     <execution>
                         <phase>package</phase>
                         <goals>
                             <goal>shade</goal>
                         </goals>
-                        <configuration>
-                            <relocations>
-                                <relocation>
-                                    <pattern>co.aikar.commands</pattern>
-                                    <shadedPattern>shaded.co.aikar.commands</shadedPattern>
-                                </relocation>
-                                <relocation>
-                                    <pattern>com.comphenix.packetwrapper</pattern>
-                                    <shadedPattern>shaded.com.comphenix.packetwrapper</shadedPattern>
-                                </relocation>
-                                <relocation>
-                                    <pattern>javassist</pattern>
-                                    <shadedPattern>shaded.javassist</shadedPattern>
-                                </relocation>
-                                <relocation>
-                                    <pattern>net.jodah.expiringmap</pattern>
-                                    <shadedPattern>shaded.net.jodah.expiringmap</shadedPattern>
-                                </relocation>
-                                <relocation>
-                                    <pattern>org.jetbrains.annotations</pattern>
-                                    <shadedPattern>shaded.org.jetbrains.annotations</shadedPattern>
-                                </relocation>
-                                <relocation>
-                                    <pattern>org.reflections</pattern>
-                                    <shadedPattern>shaded.org.reflections</shadedPattern>
-                                </relocation>
-                            </relocations>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>
         </plugins>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-            </resource>
-        </resources>
     </build>
 
     <repositories>
@@ -124,7 +119,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.0</version>
+            <version>1.18.2</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -144,6 +139,12 @@
             <artifactId>acf-bukkit</artifactId>
             <version>0.5.0-SNAPSHOT</version>
             <scope>compile</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.jetbrains</groupId>
+                    <artifactId>annotations</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.mojang</groupId>

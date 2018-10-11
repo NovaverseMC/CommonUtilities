@@ -93,17 +93,16 @@ public class ModuleManager {
     }
 
     public void disableModules() {
-        for (Map.Entry<String, Module> entry : modules.entrySet()) {
-            Module module = entry.getValue();
+        modules.forEach((key, module) -> {
             if (module.isEnabled()) {
                 if (module.getClass().getAnnotation(RegisterListeners.class) != null) {
                     service.unregisterListener((Listener) module);
                 }
                 module.onDisable();
-                log.info("Module " + entry.getKey() + " disabled!");
+                log.info("Module " + key + " disabled!");
             }
             module.onUnload();
-        }
+        });
     }
 
 }
