@@ -45,6 +45,9 @@ public class HideUnwantedCommands implements Module {
     public void onEnable() {
         wrapper.handle(protocol -> {
             protocol.addSendingListener(LISTENER_ID, ListenerPriority.HIGHEST, PacketType.Play.Server.COMMANDS, event -> {
+                if(event.getPlayer().hasPermission("common.command.bypass")) {
+                    return;
+                }
                 WrapperPlayServerCommands wrapper = new WrapperPlayServerCommands(event.getPacket());
                 RootCommandNode<?> rootNode = wrapper.getRoot();
                 Map<String, CommandNode<?>> children = Maps.newLinkedHashMap();
