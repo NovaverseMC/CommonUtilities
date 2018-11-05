@@ -4,4 +4,3 @@ main: it.feargames.commonutilities.CommonUtilities
 authors: [sgdc3]
 description: A collection of common commands and features
 softdepend: [ProtocolLib]
-api-version: 1.13

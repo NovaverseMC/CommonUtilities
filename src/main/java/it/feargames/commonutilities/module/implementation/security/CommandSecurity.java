@@ -16,6 +16,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.event.server.TabCompleteEvent;
 
 import java.util.List;
 
@@ -24,8 +25,6 @@ import static org.bukkit.ChatColor.translateAlternateColorCodes;
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 @RegisterListeners
 public class CommandSecurity implements Module, Listener {
-
-    private final static String LISTENER_ID = "FixHideTabLegacy";
 
     @ConfigValue
     private Boolean enabled = true;
@@ -40,55 +39,39 @@ public class CommandSecurity implements Module, Listener {
     @ConfigValue
     private String blacklistMessage = "&cYou don't have the permission to perform this command!";
 
-    private ProtocolServiceWrapper protocol;
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
+    public void onPlayerTabComplete(TabCompleteEvent event) {
+        if(!(event.getSender() instanceof Player)) {
+            return;
+        }
+        final Player player = (Player) event.getSender();
+        if (player.hasPermission("common.command.bypass")) {
+            return;
+        }
 
-    @Override
-    public void onLoad(String name, PluginService service, ProtocolServiceWrapper protocol) {
-        this.protocol = protocol;
-    }
+        String message = event.getBuffer();
 
-    @Override
-    public void onEnable() {
-        // Tab listener (legacy clients, while using ProtocolSupport/ViaBackwars/ViaRewind)
-        protocol.handle(protocol -> {
-            protocol.addReceivingListener(LISTENER_ID, ListenerPriority.HIGHEST, PacketType.Play.Client.TAB_COMPLETE, event -> {
-                final Player player = event.getPlayer();
-                final WrapperPlayClientTabComplete wrapper = new WrapperPlayClientTabComplete(event.getPacket());
+        if (preventEmptyTab && message.isEmpty()) {
+            event.setCancelled(true);
+            return;
+        }
 
-                if (player.hasPermission("common.command.bypass")) {
-                    return;
-                }
+        String[] components = message.split(" ");
+        String label = components[0];
 
-                String message = wrapper.getInput();
+        if (preventHiddenSyntax) {
+            if (label.contains(":")) {
+                event.setCancelled(true);
+                return;
+            }
+        }
 
-                if (preventEmptyTab && message.isEmpty()) {
-                    event.setCancelled(true);
-                    return;
-                }
-
-                String[] components = message.split(" ");
-                String label = components[0];
-
-                if (preventHiddenSyntax) {
-                    if (label.contains(":")) {
-                        event.setCancelled(true);
-                        return;
-                    }
-                }
-
-                for (String currentCommand : commandBlacklist) {
-                    if (label.equalsIgnoreCase(currentCommand)) {
-                        event.setCancelled(true);
-                        return;
-                    }
-                }
-            });
-        });
-    }
-
-    @Override
-    public void onDisable() {
-        protocol.handle(protocol -> protocol.removePacketListener(LISTENER_ID));
+        for (String currentCommand : commandBlacklist) {
+            if (label.equalsIgnoreCase(currentCommand)) {
+                event.setCancelled(true);
+                return;
+            }
+        }
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
