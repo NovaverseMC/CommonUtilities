@@ -8,6 +8,7 @@ import it.feargames.commonutilities.service.PluginService;
 import it.feargames.commonutilities.service.ProtocolServiceWrapper;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.bukkit.GameRule;
 import org.bukkit.World;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -53,7 +54,7 @@ public class LockTime implements Module, Listener {
             return;
         }
         world.setTime(ticks);
-        world.setGameRuleValue("doDaylightCycle", "false");
+        world.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
     }
 
 }
