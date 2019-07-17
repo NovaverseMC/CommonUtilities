@@ -3,6 +3,7 @@ package it.feargames.commonutilities.module.implementation.security;
 import com.comphenix.packetwrapper.WrapperPlayServerCommands;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.ListenerPriority;
+import com.comphenix.protocol.injector.server.TemporaryPlayer;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.mojang.brigadier.tree.CommandNode;
@@ -45,7 +46,7 @@ public class HideUnwantedCommands implements Module {
     public void onEnable() {
         wrapper.handle(protocol -> {
             protocol.addSendingListener(LISTENER_ID, ListenerPriority.HIGHEST, PacketType.Play.Server.COMMANDS, event -> {
-                if(event.getPlayer().hasPermission("common.command.bypass")) {
+                if(event.getPlayer() instanceof TemporaryPlayer || event.getPlayer().hasPermission("common.command.bypass")) {
                     return;
                 }
                 WrapperPlayServerCommands wrapper = new WrapperPlayServerCommands(event.getPacket());
