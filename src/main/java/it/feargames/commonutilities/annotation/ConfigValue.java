@@ -6,7 +6,6 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
-import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -108,8 +107,8 @@ public @interface ConfigValue {
         public static ValueType getType(final Field field) {
             if (List.class.isAssignableFrom(field.getType())) {
                 Type typeArgument = ((ParameterizedType) field.getGenericType()).getActualTypeArguments()[0];
-                if (typeArgument instanceof ParameterizedTypeImpl) {
-                    if (Map.class.isAssignableFrom(((ParameterizedTypeImpl) typeArgument).getRawType())) {
+                if (typeArgument instanceof ParameterizedType) {
+                    if (Map.class.isAssignableFrom((Class<?>) ((ParameterizedType) typeArgument).getRawType())) {
                         return MAP_LIST;
                     }
                 } else for (ValueType type : values()) {
