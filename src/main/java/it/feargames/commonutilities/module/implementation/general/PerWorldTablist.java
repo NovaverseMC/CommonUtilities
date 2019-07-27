@@ -55,16 +55,13 @@ public class PerWorldTablist implements Module, Listener {
 
     private void refresh(final Player player) {
         final World world = player.getWorld();
-        final boolean global = isGlobalWorld(world);
+        final boolean global = isGlobalWorld(world) || player.hasPermission("common.bypassperworldtablist");
         for (final Player current : service.getPlayers()) {
             if (global) {
                 // Show if the player is in a global world
                 service.showPlayer(player, current);
                 // Hide to players not in global worlds
-                if (!isGlobalWorld(current.getWorld())) {
-                    if(player.hasPermission("common.bypassperworldtablist")) {
-                        return;
-                    }
+                if (!isGlobalWorld(current.getWorld()) && !current.hasPermission("common.bypassperworldtablist")) {
                     service.hidePlayer(current, player);
                 }
             } else if (current.getWorld().equals(world)) {
@@ -72,13 +69,10 @@ public class PerWorldTablist implements Module, Listener {
                 service.showPlayer(player, current);
                 service.showPlayer(current, player);
             } else {
-                if(player.hasPermission("common.bypassperworldtablist")) {
-                    return;
-                }
                 // Hide players in other worlds
                 service.hidePlayer(player, current);
                 // Don't make the player invisible to players in global worlds
-                if (!isGlobalWorld(current.getWorld())) {
+                if (!isGlobalWorld(current.getWorld()) && !current.hasPermission("common.bypassperworldtablist")) {
                     service.hidePlayer(current, player);
                 }
             }
