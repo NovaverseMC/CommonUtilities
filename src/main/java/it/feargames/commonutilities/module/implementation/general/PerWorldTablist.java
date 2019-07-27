@@ -62,6 +62,9 @@ public class PerWorldTablist implements Module, Listener {
                 service.showPlayer(player, current);
                 // Hide to players not in global worlds
                 if (!isGlobalWorld(current.getWorld())) {
+                    if(player.hasPermission("common.bypassperworldtablist")) {
+                        return;
+                    }
                     service.hidePlayer(current, player);
                 }
             } else if (current.getWorld().equals(world)) {
@@ -69,6 +72,9 @@ public class PerWorldTablist implements Module, Listener {
                 service.showPlayer(player, current);
                 service.showPlayer(current, player);
             } else {
+                if(player.hasPermission("common.bypassperworldtablist")) {
+                    return;
+                }
                 // Hide players in other worlds
                 service.hidePlayer(player, current);
                 // Don't make the player invisible to players in global worlds
