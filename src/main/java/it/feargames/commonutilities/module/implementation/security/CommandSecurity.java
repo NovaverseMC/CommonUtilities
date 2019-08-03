@@ -1,22 +1,17 @@
 package it.feargames.commonutilities.module.implementation.security;
 
-import com.comphenix.packetwrapper.WrapperPlayClientTabComplete;
-import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.events.ListenerPriority;
 import com.google.common.collect.Lists;
 import it.feargames.commonutilities.annotation.ConfigValue;
 import it.feargames.commonutilities.annotation.RegisterListeners;
 import it.feargames.commonutilities.module.Module;
-import it.feargames.commonutilities.service.PluginService;
-import it.feargames.commonutilities.service.ProtocolServiceWrapper;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerChatTabCompleteEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
-import org.bukkit.event.server.TabCompleteEvent;
 
 import java.util.List;
 
@@ -39,20 +34,17 @@ public class CommandSecurity implements Module, Listener {
     @ConfigValue
     private String blacklistMessage = "&cYou don't have the permission to perform this command!";
 
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
-    public void onPlayerTabComplete(TabCompleteEvent event) {
-        if(!(event.getSender() instanceof Player)) {
-            return;
-        }
-        final Player player = (Player) event.getSender();
+    @EventHandler(priority = EventPriority.LOW)
+    public void onPlayerTabComplete(PlayerChatTabCompleteEvent event) {
+        final Player player = event.getPlayer();
         if (player.hasPermission("common.command.bypass")) {
             return;
         }
 
-        String message = event.getBuffer();
+        String message = event.getChatMessage();
 
         if (preventEmptyTab && message.isEmpty()) {
-            event.setCancelled(true);
+            event.getTabCompletions().clear();
             return;
         }
 
@@ -61,14 +53,14 @@ public class CommandSecurity implements Module, Listener {
 
         if (preventHiddenSyntax) {
             if (label.contains(":")) {
-                event.setCancelled(true);
+                event.getTabCompletions().clear();
                 return;
             }
         }
 
         for (String currentCommand : commandBlacklist) {
             if (label.equalsIgnoreCase(currentCommand)) {
-                event.setCancelled(true);
+                event.getTabCompletions().clear();
                 return;
             }
         }

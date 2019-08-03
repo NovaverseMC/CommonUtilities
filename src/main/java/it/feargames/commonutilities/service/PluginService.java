@@ -110,11 +110,11 @@ public class PluginService {
     }
 
     public void showPlayer(Player player, Player other) {
-        player.showPlayer(plugin, other);
+        player.showPlayer(other);
     }
 
     public void hidePlayer(Player player, Player other) {
-        player.hidePlayer(plugin, other);
+        player.hidePlayer(other);
     }
 
 }

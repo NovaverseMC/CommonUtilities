@@ -8,10 +8,7 @@ import it.feargames.commonutilities.service.ProtocolServiceWrapper;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
@@ -48,11 +45,6 @@ public class AntiWorldDownloader implements Module, Listener, PluginMessageListe
     @Override
     public boolean isEnabled() {
         return enabled;
-    }
-
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
-    public void onItemSwap(PlayerSwapHandItemsEvent event) {
-        event.setCancelled(true);
     }
 
     @Override
