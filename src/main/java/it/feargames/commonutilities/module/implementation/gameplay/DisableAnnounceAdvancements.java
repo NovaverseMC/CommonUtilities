@@ -7,6 +7,7 @@ import it.feargames.commonutilities.service.PluginService;
 import it.feargames.commonutilities.service.ProtocolServiceWrapper;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.bukkit.GameRule;
 import org.bukkit.World;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -45,7 +46,7 @@ public class DisableAnnounceAdvancements implements Module, Listener {
     }
 
     private void disableAnnounceAdvancements(World world) {
-        world.setGameRuleValue("announceAdvancements", "false");
+        world.setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, false);
     }
 
 }

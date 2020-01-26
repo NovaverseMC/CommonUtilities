@@ -15,6 +15,8 @@ import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
 
+// FIXME: not working as expected in some scenarios
+
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 public class FixScoreboardProtocolSupport implements Module {
 

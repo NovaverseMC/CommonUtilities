@@ -18,8 +18,8 @@ import org.bukkit.plugin.messaging.PluginMessageListener;
 @RegisterListeners
 public class AntiWorldDownloader implements Module, Listener, PluginMessageListener {
 
-    private final static String INCOMING_CHANNEL = "WDL|INIT";
-    private final static String OUTGOING_CHANNEL = "WDL|CONTROL";
+    private final static String INCOMING_CHANNEL = "wdl:init";
+    private final static String OUTGOING_CHANNEL = "wdl:control";
 
     private PluginService service;
 

@@ -49,12 +49,13 @@ public class Raid extends BaseCommand implements Module {
     @Description("Start a new raid")
     public void onRaidStart(CommandSender sender) {
         raidCheckedPlayers = new HashSet<>();
-        service.broadcast(ChatColor.GREEN + "Server data (functions, advancements, etc...) reloaded!", "common.raid");
+        service.broadcast(ChatColor.GREEN + "A new staff raid has started!" +
+                "Use '/raid next' to teleport to the next player!", "common.raid");
     }
 
     @Subcommand("next")
     @Description("Continue the current raid")
-    public void onRaidStart(Player player) {
+    public void onRaidNext(Player player) {
         if (raidCheckedPlayers == null) {
             player.sendMessage(ChatColor.RED + "You have firstly to start a raid!");
             return;
