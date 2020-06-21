@@ -24,8 +24,6 @@ public class VoidTeleport implements Module {
     @ConfigValue
     private Map<String, Double> worlds = ImmutableMap.of("world", 0.0);
     @ConfigValue
-    private Boolean useRespawn = true;
-    @ConfigValue
     private String destinationWorld = "world";
     @ConfigValue
     private Double destinationX = 0.0;
@@ -54,10 +52,6 @@ public class VoidTeleport implements Module {
                     return;
                 }
 
-                if(useRespawn) {
-                    player.spigot().respawn();
-                    return;
-                }
                 player.setFallDistance(0); // Prevent fall damage
                 Location location = new Location(service.getWorld(destinationWorld), destinationX, destinationY,
                         destinationZ, destinationYaw, destinationPitch);
