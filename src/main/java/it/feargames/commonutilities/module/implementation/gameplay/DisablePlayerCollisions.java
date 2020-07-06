@@ -50,7 +50,8 @@ public class DisablePlayerCollisions implements Module, Listener {
                 wrapper.setCollisionRule("never");
             });
         });
-        service.getPlayers().forEach(this::sendTeamPacket);
+        // Can't do that as it breaks scoreboard plugins animations
+        //service.getPlayers().forEach(this::sendTeamPacket);
     }
 
     @Override
@@ -63,7 +64,8 @@ public class DisablePlayerCollisions implements Module, Listener {
         return enabled;
     }
 
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
+    // We need to do this at LOWEST priority, so we won't break scoreboard animations
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerJoin(PlayerJoinEvent event) {
         sendTeamPacket(event.getPlayer());
     }
