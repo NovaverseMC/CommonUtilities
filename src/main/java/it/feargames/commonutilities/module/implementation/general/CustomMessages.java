@@ -41,7 +41,7 @@ public class CustomMessages implements Module, Listener {
         return enabled;
     }
 
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerJoin(PlayerJoinEvent event) {
         if (hideJoinMessages) {
             event.setJoinMessage(null);
@@ -52,7 +52,7 @@ public class CustomMessages implements Module, Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerJoin(PlayerQuitEvent event) {
         if (hideLeaveMessages) {
             event.setQuitMessage(null);
@@ -63,7 +63,7 @@ public class CustomMessages implements Module, Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerDeath(PlayerDeathEvent event) {
         if (hideDeathMessages) {
             event.setDeathMessage(null);
@@ -74,7 +74,7 @@ public class CustomMessages implements Module, Listener {
         }
     }
 
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onPlayerKick(PlayerKickEvent event) {
         if (!event.getReason().contains("You have been idle for too long!")) {
             return;
