@@ -76,6 +76,9 @@ public class CustomMessages implements Module, Listener {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
     public void onPlayerKick(PlayerKickEvent event) {
+        if (hideLeaveMessages) {
+            event.setLeaveMessage(null);
+        }
         if (!event.getReason().contains("You have been idle for too long!")) {
             return;
         }
