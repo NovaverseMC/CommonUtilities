@@ -1,8 +1,8 @@
 package it.feargames.commonutilities.module.implementation.security;
 
-import com.comphenix.packetwrapper.WrapperPlayServerCommands;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.ListenerPriority;
+import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.injector.server.TemporaryPlayer;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -49,8 +49,10 @@ public class HideUnwantedCommands implements Module {
                 if(event.getPlayer() instanceof TemporaryPlayer || event.getPlayer().hasPermission("common.command.bypass")) {
                     return;
                 }
-                WrapperPlayServerCommands wrapper = new WrapperPlayServerCommands(event.getPacket());
-                RootCommandNode<?> rootNode = wrapper.getRoot();
+
+                PacketContainer packet = event.getPacket();
+                RootCommandNode<?> rootNode = (RootCommandNode<?>) packet.getModifier().read(0);
+
                 Map<String, CommandNode<?>> children = Maps.newLinkedHashMap();
                 for (CommandNode<?> node : rootNode.getChildren()) {
                     if (commandBlacklist.contains(node.getName())) {

@@ -1,8 +1,9 @@
 package it.feargames.commonutilities.module.implementation.fix;
 
-import com.comphenix.packetwrapper.WrapperPlayServerScoreboardTeam;
 import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.events.InternalStructure;
 import com.comphenix.protocol.events.ListenerPriority;
+import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.ComponentConverter;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import it.feargames.commonutilities.annotation.ConfigValue;
@@ -14,6 +15,8 @@ import lombok.NoArgsConstructor;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
+
+import java.util.Optional;
 
 // FIXME: not working as expected in some scenarios
 
@@ -48,15 +51,23 @@ public class FixScoreboardProtocolSupport implements Module {
         wrapper.handle(protocol -> {
             // Protocol docs: http://wiki.vg/Protocol#Teams
             protocol.addSendingListener(LISTENER_ID, ListenerPriority.HIGH, PacketType.Play.Server.SCOREBOARD_TEAM, event -> {
-                final WrapperPlayServerScoreboardTeam wrapper = new WrapperPlayServerScoreboardTeam(event.getPacket());
-                if(wrapper.getMode() != WrapperPlayServerScoreboardTeam.Mode.TEAM_CREATED
-                        && wrapper.getMode() != WrapperPlayServerScoreboardTeam.Mode.TEAM_UPDATED) {
+                PacketContainer packet = event.getPacket();
+                int mode = packet.getIntegers().read(0);
+
+                // Created or updated
+                if(mode != 0 && mode != 2) {
                     return;
                 }
 
+                InternalStructure structure = packet.getOptionalStructures().read(0)
+                        .orElseThrow(() -> new RuntimeException("Invalid packet!"));
+
+                WrappedChatComponent prefix = structure.getChatComponents().read(1);
+                WrappedChatComponent suffix = structure.getChatComponents().read(2);
+
                 // Reparse, prevent mixed legacy-component formats
-                String scoreBuilder = BaseComponent.toLegacyText(ComponentConverter.fromWrapper(wrapper.getPrefix())) +
-                        BaseComponent.toLegacyText(ComponentConverter.fromWrapper(wrapper.getSuffix()));
+                String scoreBuilder = BaseComponent.toLegacyText(ComponentConverter.fromWrapper(prefix)) +
+                        BaseComponent.toLegacyText(ComponentConverter.fromWrapper(suffix));
                 final BaseComponent[] messageComponents = TextComponent.fromLegacyText(scoreBuilder);
 
                 final StringBuilder prefixBuilder = new StringBuilder(16);
@@ -85,8 +96,9 @@ public class FixScoreboardProtocolSupport implements Module {
                         }
                     }
                 }
-                wrapper.setPrefix(WrappedChatComponent.fromText(prefixBuilder.toString()));
-                wrapper.setSuffix(WrappedChatComponent.fromText(suffixBuilder.toString()));
+
+                structure.getChatComponents().write(1, WrappedChatComponent.fromText(prefixBuilder.toString()));
+                structure.getChatComponents().write(2, WrappedChatComponent.fromText(suffixBuilder.toString()));
             });
         });
     }

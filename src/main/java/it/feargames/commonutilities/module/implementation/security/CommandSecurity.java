@@ -1,8 +1,8 @@
 package it.feargames.commonutilities.module.implementation.security;
 
-import com.comphenix.packetwrapper.WrapperPlayClientTabComplete;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.ListenerPriority;
+import com.comphenix.protocol.events.PacketContainer;
 import com.google.common.collect.Lists;
 import it.feargames.commonutilities.annotation.ConfigValue;
 import it.feargames.commonutilities.annotation.RegisterListeners;
@@ -53,13 +53,13 @@ public class CommandSecurity implements Module, Listener {
         protocol.handle(protocol -> {
             protocol.addReceivingListener(LISTENER_ID, ListenerPriority.HIGHEST, PacketType.Play.Client.TAB_COMPLETE, event -> {
                 final Player player = event.getPlayer();
-                final WrapperPlayClientTabComplete wrapper = new WrapperPlayClientTabComplete(event.getPacket());
+                final PacketContainer packet = event.getPacket();
 
                 if (player.hasPermission("common.command.bypass")) {
                     return;
                 }
 
-                String message = wrapper.getInput();
+                String message = packet.getStrings().read(0);
 
                 if (preventEmptyTab && message.isEmpty()) {
                     event.setCancelled(true);
