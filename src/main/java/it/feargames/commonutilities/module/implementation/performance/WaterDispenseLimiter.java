@@ -21,9 +21,9 @@ import java.util.Map;
 public class WaterDispenseLimiter implements Module, Listener {
 
     @ConfigValue
-    private Boolean enabled = false;
+    private final Boolean enabled = false;
     @ConfigValue
-    private int fluidDispenseCooldown = 10000;
+    private final int fluidDispenseCooldown = 10000;
 
     private Map<Location, Long> lastDispenseMap;
 

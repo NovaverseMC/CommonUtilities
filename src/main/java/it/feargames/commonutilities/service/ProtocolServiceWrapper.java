@@ -1,11 +1,12 @@
 package it.feargames.commonutilities.service;
 
-import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.ProtocolLibrary;
-import com.comphenix.protocol.events.ListenerPriority;
-import com.comphenix.protocol.events.PacketAdapter;
-import com.comphenix.protocol.events.PacketEvent;
-import com.comphenix.protocol.events.PacketListener;
+import com.github.retrooper.packetevents.PacketEvents;
+import com.github.retrooper.packetevents.event.PacketListenerAbstract;
+import com.github.retrooper.packetevents.event.PacketListenerPriority;
+import com.github.retrooper.packetevents.event.PacketReceiveEvent;
+import com.github.retrooper.packetevents.event.PacketSendEvent;
+import com.github.retrooper.packetevents.protocol.packettype.PacketTypeCommon;
+import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder;
 import it.feargames.commonutilities.CommonUtilities;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -14,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 import java.util.function.Consumer;
 
 @RequiredArgsConstructor
@@ -29,65 +29,71 @@ public class ProtocolServiceWrapper {
 
     // Can't return optional + lambdas as they would trigger a class lookup and cause an exception if ProtocolLib isn't installed
     public void handle(Consumer<ProtocolService> handler) {
-        if(protocolService != null) {
-            handler.accept(protocolService);
-        }
+        if (protocolService != null) handler.accept(protocolService);
     }
 
     public void initialize() {
-        if (pluginService.isPluginEnabled("ProtocolLib")) {
-            protocolService = new ProtocolService();
-        }
+        PacketEvents.setAPI(SpigotPacketEventsBuilder.build(plugin));
     }
 
     public void cleanup() {
-        handle(ProtocolService::unregisterAll);
+        handle(ProtocolService :: unregisterAll);
     }
 
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public class ProtocolService {
 
-        private Map<String, PacketListener> listeners = new HashMap<>();
+        private final Map<String, PacketListenerAbstract> listeners = new HashMap<>();
 
         public void unregisterAll() {
             listeners.values().forEach(listener -> {
-                ProtocolLibrary.getProtocolManager().removePacketListener(listener);
+                PacketEvents.getAPI().getEventManager().unregisterListener(listener);
             });
             listeners.clear();
         }
 
         public void removePacketListener(String listenerId) {
-            PacketListener listener = listeners.get(listenerId);
-            ProtocolLibrary.getProtocolManager().removePacketListener(listener);
+            PacketListenerAbstract listener = listeners.get(listenerId);
+            PacketEvents.getAPI().getEventManager().unregisterListeners(listener);
         }
 
-        public void addSendingListener(String listenerId, ListenerPriority priority, PacketType packetType, Consumer<PacketEvent> consumer) {
-            if (listeners.containsKey(listenerId)) {
-                throw new IllegalStateException("A listener with id " + listenerId + " is already registered!");
-            }
-            PacketListener listener = new PacketAdapter(plugin, priority, packetType) {
+        public void addSendingListener(String listenerId, PacketListenerPriority priority, PacketTypeCommon packetTypeCommon, Consumer<PacketSendEvent> consumer) {
+            ensureSingleListener(listenerId);
+
+            PacketListenerAbstract listener = new PacketListenerAbstract(priority) {
                 @Override
-                public void onPacketSending(PacketEvent event) {
+                public void onPacketSend(PacketSendEvent event) {
+                    if (event.getPacketType() != packetTypeCommon) return;
                     consumer.accept(event);
                 }
             };
-            ProtocolLibrary.getProtocolManager().addPacketListener(listener);
-            listeners.put(listenerId, listener);
+
+            registerListener(listenerId, listener);
         }
 
-        public void addReceivingListener(String listenerId, ListenerPriority priority, PacketType packetType, Consumer<PacketEvent> consumer) {
-            if (listeners.containsKey(listenerId)) {
-                throw new IllegalStateException("A listener with id " + listenerId + " is already registered!");
-            }
-            PacketListener listener = new PacketAdapter(plugin, priority, packetType) {
+        public void addReceivingListener(String listenerId, PacketListenerPriority priority, PacketTypeCommon packetTypeCommon, Consumer<PacketReceiveEvent> consumer) {
+            ensureSingleListener(listenerId);
+
+            PacketListenerAbstract listener = new PacketListenerAbstract(priority) {
                 @Override
-                public void onPacketReceiving(PacketEvent event) {
+                public void onPacketReceive(PacketReceiveEvent event) {
+                    if (event.getPacketType() != packetTypeCommon) return;
                     consumer.accept(event);
                 }
             };
-            ProtocolLibrary.getProtocolManager().addPacketListener(listener);
-            listeners.put(listenerId, listener);
+
+            registerListener(listenerId, listener);
         }
+    }
+
+    private void registerListener(String listenerId, PacketListenerAbstract listener) {
+        PacketEvents.getAPI().getEventManager().registerListener(listener);
+        protocolService.listeners.put(listenerId, listener);
+    }
+
+    private void ensureSingleListener(String listenerId) {
+        if (protocolService.listeners.containsKey(listenerId))
+            throw new IllegalStateException("A listener with id " + listenerId + " is already registered!");
     }
 
 }

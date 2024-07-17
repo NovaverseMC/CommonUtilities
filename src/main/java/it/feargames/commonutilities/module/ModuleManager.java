@@ -1,6 +1,5 @@
 package it.feargames.commonutilities.module;
 
-import co.aikar.commands.BaseCommand;
 import it.feargames.commonutilities.annotation.RegisterCommands;
 import it.feargames.commonutilities.annotation.RegisterListeners;
 import it.feargames.commonutilities.service.CommandService;
@@ -44,7 +43,8 @@ public class ModuleManager {
                 continue;
             }
             try {
-                String moduleName = Character.toLowerCase(moduleClass.getSimpleName().charAt(0)) + moduleClass.getSimpleName().substring(1);
+                String moduleName = Character.toLowerCase(moduleClass.getSimpleName()
+                        .charAt(0)) + moduleClass.getSimpleName().substring(1);
                 ConfigurationSection moduleConfig = config.getConfigurationSection(moduleName);
                 if (moduleConfig == null) {
                     moduleConfig = config.createSection(moduleName);
@@ -65,7 +65,8 @@ public class ModuleManager {
             constructor.setAccessible(true);
             module = constructor.newInstance();
             constructor.setAccessible(accessible);
-        } catch (NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
+        } catch (NoSuchMethodException | IllegalAccessException | InstantiationException |
+                 InvocationTargetException e) {
             log.log(Level.SEVERE, "Unable to construct module " + name + "!", e);
             return;
         }
@@ -84,9 +85,12 @@ public class ModuleManager {
             if (module.getClass().getAnnotation(RegisterListeners.class) != null) {
                 service.registerListener((Listener) module);
             }
-            if (module.getClass().getAnnotation(RegisterCommands.class) != null) {
-                commands.registerCommand((BaseCommand) module);
-            }
+            
+            // TODO: Check better this command registration since cloud already parses all containers.
+            // if (module.getClass().getAnnotation(RegisterCommands.class) != null) {
+            //  commands.registerCommand((BaseCommand) module);
+            //}
+
             module.onEnable();
             log.info("Module " + entry.getKey() + " enabled!");
         }

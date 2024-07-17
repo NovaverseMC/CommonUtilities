@@ -16,7 +16,7 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 public class ChatFormatRemover implements Module, Listener {
 
     @ConfigValue
-    private Boolean enabled = false;
+    private final Boolean enabled = false;
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
     public void onPlayerChat(AsyncPlayerChatEvent event) {

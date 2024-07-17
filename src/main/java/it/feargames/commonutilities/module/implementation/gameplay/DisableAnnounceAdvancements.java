@@ -21,7 +21,7 @@ public class DisableAnnounceAdvancements implements Module, Listener {
     private PluginService service;
 
     @ConfigValue
-    private Boolean enabled = true;
+    private final Boolean enabled = true;
 
     @Override
     public void onLoad(String name, PluginService service, ProtocolServiceWrapper protocol) {

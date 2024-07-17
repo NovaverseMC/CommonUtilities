@@ -2,7 +2,7 @@ package it.feargames.commonutilities.config;
 
 import it.feargames.commonutilities.annotation.ConfigValue;
 import lombok.NonNull;
-import org.apache.commons.lang.reflect.FieldUtils;
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.lang.reflect.Field;

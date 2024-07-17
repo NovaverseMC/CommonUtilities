@@ -24,9 +24,9 @@ public class LockTime implements Module, Listener {
     private PluginService service;
 
     @ConfigValue
-    private Boolean enabled = false;
+    private final Boolean enabled = false;
     @ConfigValue
-    private Map<String, Integer> worlds = ImmutableMap.of("world", 0);
+    private final Map<String, Integer> worlds = ImmutableMap.of("world", 0);
 
     @Override
     public void onLoad(String name, PluginService service, ProtocolServiceWrapper protocol) {

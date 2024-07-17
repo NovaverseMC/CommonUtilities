@@ -20,21 +20,21 @@ import static org.bukkit.ChatColor.translateAlternateColorCodes;
 public class CustomMessages implements Module, Listener {
 
     @ConfigValue
-    private Boolean enabled = false;
+    private final Boolean enabled = false;
     @ConfigValue
-    private Boolean hideJoinMessages = false;
+    private final Boolean hideJoinMessages = false;
     @ConfigValue
-    private String customJoinMessage = "";
+    private final String customJoinMessage = "";
     @ConfigValue
-    private Boolean hideLeaveMessages = false;
+    private final Boolean hideLeaveMessages = false;
     @ConfigValue
-    private String customLeaveMessage = "";
+    private final String customLeaveMessage = "";
     @ConfigValue
-    private Boolean hideDeathMessages = false;
+    private final Boolean hideDeathMessages = false;
     @ConfigValue
-    private String customDeathMessage = "";
+    private final String customDeathMessage = "";
     @ConfigValue
-    private String customIdleKickMessage = "";
+    private final String customIdleKickMessage = "";
 
     @Override
     public boolean isEnabled() {

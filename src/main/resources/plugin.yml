@@ -1,7 +1,13 @@
 name: CommonUtilities
 version: ${project.version}
 main: it.feargames.commonutilities.CommonUtilities
-authors: [sgdc3]
+authors: [ sgdc3 ]
 description: A collection of common commands and features
-softdepend: [ProtocolLib]
+softdepend: [ packetevents ]
 api-version: '1.17'
+
+
+libraries:
+  - "org.incendo:cloud-core:2.0.0-rc.2"
+  - "org.incendo:cloud-annotations:2.0.0-rc.2"
+  - "org.incendo:cloud-paper:2.0.0-beta.8"

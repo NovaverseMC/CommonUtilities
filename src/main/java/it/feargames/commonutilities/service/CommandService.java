@@ -1,32 +1,41 @@
 package it.feargames.commonutilities.service;
 
-import co.aikar.commands.BaseCommand;
-import co.aikar.commands.BukkitCommandManager;
 import it.feargames.commonutilities.CommonUtilities;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import org.bukkit.command.CommandSender;
+import org.incendo.cloud.annotations.AnnotationParser;
+import org.incendo.cloud.execution.ExecutionCoordinator;
+import org.incendo.cloud.paper.LegacyPaperCommandManager;
 
 @NoArgsConstructor
 public class CommandService {
 
-    private BukkitCommandManager commandManager = null;
-
     @SuppressWarnings("deprecated")
     public void register(@NonNull CommonUtilities plugin) {
-        commandManager = new BukkitCommandManager(plugin);
-        commandManager.enableUnstableAPI("help");
+        LegacyPaperCommandManager<CommandSender> paperCommandManager = LegacyPaperCommandManager.createNative(
+                plugin,
+                ExecutionCoordinator.asyncCoordinator()
+        );
+
+        AnnotationParser<CommandSender> commandSenderAnnotationParser = new AnnotationParser<>(
+                paperCommandManager,
+                CommandSender.class
+        );
+
+        try {
+            commandSenderAnnotationParser.parseContainers(plugin.getClass().getClassLoader());
+        } catch (Exception e) {
+            plugin.getLogger().severe("There was an error while parsing the command containers: " + e.getMessage());
+        }
     }
 
-    public void registerCommand(BaseCommand command) {
-        commandManager.registerCommand(command);
+    public void registerParamterInjector() {
+        // TODO: Implement parameter injector
     }
-
-    public void unregisterCommand(BaseCommand command) {
-        commandManager.unregisterCommand(command);
-    }
-
-    public void unregisterCommands() {
-        commandManager.unregisterCommands();
+    
+    public void registerArgumentSupplier() {
+        // TODO: Implement argument supplier
     }
 
 }

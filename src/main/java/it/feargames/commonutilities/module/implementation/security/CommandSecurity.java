@@ -1,8 +1,8 @@
 package it.feargames.commonutilities.module.implementation.security;
 
-import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.events.ListenerPriority;
-import com.comphenix.protocol.events.PacketContainer;
+import com.github.retrooper.packetevents.event.PacketListenerPriority;
+import com.github.retrooper.packetevents.protocol.packettype.PacketType;
+import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientTabComplete;
 import com.google.common.collect.Lists;
 import it.feargames.commonutilities.annotation.ConfigValue;
 import it.feargames.commonutilities.annotation.RegisterListeners;
@@ -28,17 +28,40 @@ public class CommandSecurity implements Module, Listener {
     private final static String LISTENER_ID = "FixHideTabLegacy";
 
     @ConfigValue
-    private Boolean enabled = true;
+    private final Boolean enabled = true;
     @ConfigValue
-    private Boolean preventHiddenSyntax = true;
+    private final Boolean preventHiddenSyntax = true;
     @ConfigValue
-    private Boolean preventEmptyTab = true;
+    private final Boolean preventEmptyTab = true;
     @ConfigValue
-    private String hiddenSyntaxMessage = "&fUnknown command.";
+    private final String hiddenSyntaxMessage = "&fUnknown command.";
     @ConfigValue
-    private List<String> commandBlacklist = Lists.newArrayList("pl", "plugins", "ver", "version", "about", "?", "me", "kill", "plugman", "efly", "esethome", "etpa", "etpahere", "etpyes", "etpaccept", "etpno", "etpdenz", "etpdeny", "eheal", "ekit", "eback", "erepair", "ewarp");
+    private final List<String> commandBlacklist = Lists.newArrayList("pl",
+            "plugins",
+            "ver",
+            "version",
+            "about",
+            "?",
+            "me",
+            "kill",
+            "plugman",
+            "efly",
+            "esethome",
+            "etpa",
+            "etpahere",
+            "etpyes",
+            "etpaccept",
+            "etpno",
+            "etpdenz",
+            "etpdeny",
+            "eheal",
+            "ekit",
+            "eback",
+            "erepair",
+            "ewarp"
+    );
     @ConfigValue
-    private String blacklistMessage = "&cYou don't have the permission to perform this command!";
+    private final String blacklistMessage = "&cYou don't have the permission to perform this command!";
 
     private ProtocolServiceWrapper protocol;
 
@@ -51,38 +74,37 @@ public class CommandSecurity implements Module, Listener {
     public void onEnable() {
         // Tab listener (legacy clients, while using ProtocolSupport/ViaBackwars/ViaRewind)
         protocol.handle(protocol -> {
-            protocol.addReceivingListener(LISTENER_ID, ListenerPriority.HIGHEST, PacketType.Play.Client.TAB_COMPLETE, event -> {
-                final Player player = event.getPlayer();
-                final PacketContainer packet = event.getPacket();
+            protocol.addReceivingListener(LISTENER_ID,
+                    PacketListenerPriority.HIGHEST,
+                    PacketType.Play.Client.TAB_COMPLETE,
+                    event -> {
+                        Player player = (Player) event.getPlayer();
+                        if (player.hasPermission("common.command.bypass")) return;
+                        WrapperPlayClientTabComplete wrapper = new WrapperPlayClientTabComplete(event);
+                        String message = wrapper.getText();
 
-                if (player.hasPermission("common.command.bypass")) {
-                    return;
-                }
+                        if (preventEmptyTab && message.isEmpty()) {
+                            event.setCancelled(true);
+                            return;
+                        }
 
-                String message = packet.getStrings().read(0);
+                        String[] components = message.split(" ");
+                        String label = components[0];
 
-                if (preventEmptyTab && message.isEmpty()) {
-                    event.setCancelled(true);
-                    return;
-                }
+                        if (preventHiddenSyntax && label.contains(":")) {
+                            event.setCancelled(true);
+                            return;
+                        }
 
-                String[] components = message.split(" ");
-                String label = components[0];
+                        for (String currentCommand : commandBlacklist) {
+                            if (label.equalsIgnoreCase(currentCommand)) {
+                                event.setCancelled(true);
+                                return;
+                            }
+                        }
 
-                if (preventHiddenSyntax) {
-                    if (label.contains(":")) {
-                        event.setCancelled(true);
-                        return;
                     }
-                }
-
-                for (String currentCommand : commandBlacklist) {
-                    if (label.equalsIgnoreCase(currentCommand)) {
-                        event.setCancelled(true);
-                        return;
-                    }
-                }
-            });
+            );
         });
     }
 

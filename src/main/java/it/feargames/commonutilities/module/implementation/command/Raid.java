@@ -1,8 +1,5 @@
 package it.feargames.commonutilities.module.implementation.command;
 
-import co.aikar.commands.BaseCommand;
-import co.aikar.commands.CommandHelp;
-import co.aikar.commands.annotation.*;
 import it.feargames.commonutilities.annotation.ConfigValue;
 import it.feargames.commonutilities.annotation.RegisterCommands;
 import it.feargames.commonutilities.module.Module;
@@ -13,20 +10,22 @@ import lombok.NoArgsConstructor;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.incendo.cloud.annotations.Command;
+import org.incendo.cloud.annotations.CommandDescription;
+import org.incendo.cloud.annotations.Permission;
+import org.incendo.cloud.annotations.processing.CommandContainer;
 
 import java.util.HashSet;
 import java.util.Set;
 
-@NoArgsConstructor(access = AccessLevel.PACKAGE)
 @RegisterCommands
-@CommandPermission("common.raid")
-@CommandAlias("raid")
-public class Raid extends BaseCommand implements Module {
+@CommandContainer
+public class Raid implements Module {
 
     private PluginService service;
 
     @ConfigValue
-    private Boolean enabled = true;
+    private final Boolean enabled = true;
 
     private Set<String> raidCheckedPlayers;
 
@@ -45,37 +44,42 @@ public class Raid extends BaseCommand implements Module {
         return enabled;
     }
 
-    @Subcommand("start")
-    @Description("Start a new raid")
-    public void onRaidStart(CommandSender sender) {
+
+    @Command("raid start")
+    @CommandDescription("Start a new raid")
+    @Permission("common.raid")
+    public void onRaidStart() {
         raidCheckedPlayers = new HashSet<>();
-        service.broadcast(ChatColor.GREEN + "A new staff raid has started!" +
-                "Use '/raid next' to teleport to the next player!", "common.raid");
+
+        service.broadcast(
+                ChatColor.GREEN + "A new staff raid has started!" + "Use '/raid next' to teleport to the next player!",
+                "common.raid"
+        );
     }
 
-    @Subcommand("next")
-    @Description("Continue the current raid")
+    @Command("raid next")
+    @CommandDescription("Continue the current raid")
+    @Permission("common.raid")
     public void onRaidNext(Player player) {
         if (raidCheckedPlayers == null) {
             player.sendMessage(ChatColor.RED + "You have firstly to start a raid!");
             return;
         }
+
         for (Player currentPlayer : service.getPlayers()) {
-            if (raidCheckedPlayers.contains(currentPlayer.getName())) {
-                continue;
-            }
+            if (raidCheckedPlayers.contains(currentPlayer.getName())) continue;
+
             player.teleport(currentPlayer);
             raidCheckedPlayers.add(currentPlayer.getName());
+
             player.sendMessage(ChatColor.YELLOW + "Teleported to " + currentPlayer.getName());
             return;
         }
+
         raidCheckedPlayers = null;
         service.broadcast(ChatColor.GREEN + "Raid completed!", "common.raid");
     }
 
-    @HelpCommand
-    public void doHelp(CommandSender sender, CommandHelp help) {
-        sender.sendMessage("---- CommonUtilities Raid ----");
-        help.showHelp();
-    }
+    // TODO: Add missing help command
+
 }
