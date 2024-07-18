@@ -79,7 +79,4 @@ public class Raid implements Module {
         raidCheckedPlayers = null;
         service.broadcast(ChatColor.GREEN + "Raid completed!", "common.raid");
     }
-
-    // TODO: Add missing help command
-
 }
