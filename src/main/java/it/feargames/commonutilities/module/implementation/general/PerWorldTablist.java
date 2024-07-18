@@ -25,9 +25,9 @@ public class PerWorldTablist implements Module, Listener {
     private PluginService service;
 
     @ConfigValue
-    private final Boolean enabled = false;
+    private Boolean enabled = false;
     @ConfigValue
-    private final List<String> globalWorlds = ImmutableList.of("Spawn");
+    private List<String> globalWorlds = ImmutableList.of("Spawn");
 
     @Override
     public void onLoad(String name, PluginService service, ProtocolServiceWrapper protocol) {

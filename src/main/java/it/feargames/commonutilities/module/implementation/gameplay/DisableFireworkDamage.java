@@ -16,7 +16,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 public class DisableFireworkDamage implements Module, Listener {
 
     @ConfigValue
-    private final Boolean enabled = false;
+    private Boolean enabled = false;
 
     @Override
     public boolean isEnabled() {

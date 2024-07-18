@@ -18,23 +18,23 @@ public class VoidTeleport implements Module {
     private PluginService service;
 
     @ConfigValue
-    private final Boolean enabled = false;
+    private Boolean enabled = false;
     @ConfigValue
-    private final Long taskPeriod = 5L;
+    private Long taskPeriod = 5L;
     @ConfigValue
-    private final Map<String, Double> worlds = ImmutableMap.of("world", 0.0);
+    private Map<String, Double> worlds = ImmutableMap.of("world", 0.0);
     @ConfigValue
-    private final String destinationWorld = "world";
+    private String destinationWorld = "world";
     @ConfigValue
-    private final Double destinationX = 0.0;
+    private Double destinationX = 0.0;
     @ConfigValue
-    private final Double destinationY = 0.0;
+    private Double destinationY = 0.0;
     @ConfigValue
-    private final Double destinationZ = 0.0;
+    private Double destinationZ = 0.0;
     @ConfigValue
-    private final Float destinationYaw = 0.0F;
+    private Float destinationYaw = 0.0F;
     @ConfigValue
-    private final Float destinationPitch = 0.0F;
+    private Float destinationPitch = 0.0F;
 
     private BukkitTask task = null;
 

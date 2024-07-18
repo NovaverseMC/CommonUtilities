@@ -24,9 +24,9 @@ public class AntiWorldDownloader implements Module, Listener, PluginMessageListe
     private PluginService service;
 
     @ConfigValue
-    private final Boolean enabled = false;
+    private Boolean enabled = false;
     @ConfigValue
-    private final String punishCommand = "kick %p WDL is not authorized on this server!";
+    private String punishCommand = "kick %p WDL is not authorized on this server!";
 
     @Override
     public void onLoad(String name, PluginService service, ProtocolServiceWrapper protocol) {

@@ -28,15 +28,15 @@ public class CommandSecurity implements Module, Listener {
     private final static String LISTENER_ID = "FixHideTabLegacy";
 
     @ConfigValue
-    private final Boolean enabled = true;
+    private Boolean enabled = true;
     @ConfigValue
-    private final Boolean preventHiddenSyntax = true;
+    private Boolean preventHiddenSyntax = true;
     @ConfigValue
-    private final Boolean preventEmptyTab = true;
+    private Boolean preventEmptyTab = true;
     @ConfigValue
-    private final String hiddenSyntaxMessage = "&fUnknown command.";
+    private String hiddenSyntaxMessage = "&fUnknown command.";
     @ConfigValue
-    private final List<String> commandBlacklist = Lists.newArrayList("pl",
+    private List<String> commandBlacklist = Lists.newArrayList("pl",
             "plugins",
             "ver",
             "version",
@@ -61,7 +61,7 @@ public class CommandSecurity implements Module, Listener {
             "ewarp"
     );
     @ConfigValue
-    private final String blacklistMessage = "&cYou don't have the permission to perform this command!";
+    private String blacklistMessage = "&cYou don't have the permission to perform this command!";
 
     private ProtocolServiceWrapper protocol;
 

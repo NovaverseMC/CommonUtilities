@@ -15,7 +15,7 @@ import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 public class DisableItemSwap implements Module, Listener {
 
     @ConfigValue
-    private final Boolean enabled = true;
+    private Boolean enabled = true;
 
     @Override
     public boolean isEnabled() {

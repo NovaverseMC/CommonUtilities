@@ -25,9 +25,10 @@ public class HideUnwantedCommands implements Module {
     private ProtocolServiceWrapper wrapper;
 
     @ConfigValue
-    private final Boolean enabled = false;
+    private Boolean enabled = false;
+
     @ConfigValue
-    private final List<String> commandBlacklist = Lists.newArrayList("worldedit", "worldguard");
+    private List<String> commandBlacklist = Lists.newArrayList("worldedit", "worldguard");
 
     @Override
     public void onLoad(String name, PluginService service, ProtocolServiceWrapper wrapper) {

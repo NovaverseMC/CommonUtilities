@@ -27,9 +27,9 @@ public class LockWeather implements Module, Listener {
     private PluginService service;
 
     @ConfigValue
-    private final Boolean enabled = false;
+    private Boolean enabled = false;
     @ConfigValue
-    private final Map<String, Integer> worlds = ImmutableMap.of("world", 0);
+    private Map<String, Integer> worlds = ImmutableMap.of("world", 0);
 
     @Override
     public void onLoad(String name, PluginService service, ProtocolServiceWrapper protocol) {

@@ -34,50 +34,8 @@
                     <target>17</target>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.6.0</version>
-                <configuration>
-                    <relocations>
-                        <!--
-                        <relocation>
-                            <pattern>co.aikar.commands</pattern>
-                            <shadedPattern>shaded.co.aikar.commands</shadedPattern>
-                        </relocation>
-                        -->
-                        <!--
-                        <relocation>
-                            <pattern>com.comphenix.packetwrapper</pattern>
-                            <shadedPattern>shaded.com.comphenix.packetwrapper</shadedPattern>
-                        </relocation>
-                        -->
-                        <relocation>
-                            <pattern>javassist</pattern>
-                            <shadedPattern>shaded.javassist</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>net.jodah.expiringmap</pattern>
-                            <shadedPattern>shaded.net.jodah.expiringmap</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>org.reflections</pattern>
-                            <shadedPattern>shaded.org.reflections</shadedPattern>
-                        </relocation>
-                    </relocations>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
     </build>
-
     <repositories>
         <repository>
             <id>papermc</id>
@@ -92,7 +50,6 @@
             <url>https://libraries.minecraft.net</url>
         </repository>
     </repositories>
-
     <dependencies>
         <dependency>
             <groupId>io.papermc.paper</groupId>
@@ -120,6 +77,7 @@
             <version>1.18.20</version>
             <scope>provided</scope>
         </dependency>
+        <!--TODO: Need migrations to classgraph-->
         <dependency>
             <groupId>org.reflections</groupId>
             <artifactId>reflections</artifactId>
@@ -133,33 +91,28 @@
             </exclusions>
         </dependency>
         <dependency>
+            <groupId>io.github.classgraph</groupId>
+            <artifactId>classgraph</artifactId>
+            <version>4.8.174</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>org.incendo</groupId>
             <artifactId>cloud-core</artifactId>
             <version>2.0.0-rc.2</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.incendo</groupId>
             <artifactId>cloud-annotations</artifactId>
             <version>2.0.0-rc.2</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.incendo</groupId>
             <artifactId>cloud-paper</artifactId>
             <version>2.0.0-beta.8</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.mojang</groupId>
-            <artifactId>brigadier</artifactId>
-            <version>1.0.18</version>
             <scope>provided</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.google.guava</groupId>
-                    <artifactId>guava</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
-
     </dependencies>
 </project>

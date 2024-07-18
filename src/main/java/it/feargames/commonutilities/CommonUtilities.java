@@ -18,35 +18,43 @@ public final class CommonUtilities extends JavaPlugin {
     private ProtocolServiceWrapper protocol;
     private ModuleManager moduleManager;
 
+    private File configFile;
+
     @Override
     public void onLoad() {
-        if (!getDataFolder().exists()) {
-            getDataFolder().mkdirs();
+        try {
+            ensureConfigCreation();
+        } catch (IOException e) {
+            getLogger().severe("Unable to create the default config file! " + e.getMessage());
         }
-        final File configFile = new File(getDataFolder(), "config.yml");
-        if (!configFile.exists()) {
-            try {
-                configFile.createNewFile();
-            } catch (IOException e) {
-                getLogger().severe("Unable to create the default config file!");
-                setEnabled(false);
-                return;
-            }
-        }
+
         final YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+
         service = new PluginService(this);
         commands = new CommandService();
         protocol = new ProtocolServiceWrapper(this, service);
+        
         final ConfigurationSection section = config.isConfigurationSection("modules") ?
                 config.getConfigurationSection("modules") : config.createSection("modules");
+
         moduleManager = new ModuleManager(section, service, commands, protocol);
         moduleManager.loadInternalModules(() -> {
             try {
                 config.save(configFile);
             } catch (IOException e) {
-                getLogger().severe("Unable to save the default config file!");
+                getLogger().severe("Unable to save the default config file! " + e.getMessage());
             }
         });
+    }
+
+    private void ensureConfigCreation() throws IOException {
+        if (!getDataFolder().exists()) getDataFolder().mkdirs();
+        configFile = new File(getDataFolder(), "config.yml");
+
+        if (!configFile.exists()) {
+            getDataFolder().mkdirs();
+            configFile.createNewFile();
+        }
     }
 
     @Override

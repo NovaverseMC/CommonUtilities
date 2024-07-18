@@ -18,11 +18,11 @@ import java.util.List;
 public class DisablePhysics implements Module, Listener {
 
     @ConfigValue
-    private final Boolean enabled = false;
+    private Boolean enabled = false;
     @ConfigValue
-    private final List<String> worlds = new ArrayList<>();
+    private List<String> worlds = new ArrayList<>();
     @ConfigValue
-    private final Boolean whitelist = true;
+    private Boolean whitelist = true;
 
     @Override
     public boolean isEnabled() {

@@ -25,7 +25,7 @@ public class Raid implements Module {
     private PluginService service;
 
     @ConfigValue
-    private final Boolean enabled = true;
+    private Boolean enabled = true;
 
     private Set<String> raidCheckedPlayers;
 

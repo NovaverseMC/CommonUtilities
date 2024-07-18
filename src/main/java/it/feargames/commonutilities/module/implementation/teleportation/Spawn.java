@@ -21,23 +21,23 @@ public class Spawn implements Module, Listener {
     private PluginService service;
 
     @ConfigValue
-    private final Boolean enabled = false;
+    private Boolean enabled = false;
     @ConfigValue
-    private final Boolean onJoin = true;
+    private Boolean onJoin = true;
     @ConfigValue
-    private final Boolean onRespawn = true;
+    private Boolean onRespawn = true;
     @ConfigValue
-    private final String destinationWorld = "world";
+    private String destinationWorld = "world";
     @ConfigValue
-    private final Double destinationX = 0.0;
+    private Double destinationX = 0.0;
     @ConfigValue
-    private final Double destinationY = 0.0;
+    private Double destinationY = 0.0;
     @ConfigValue
-    private final Double destinationZ = 0.0;
+    private Double destinationZ = 0.0;
     @ConfigValue
-    private final Float destinationYaw = 0.0F;
+    private Float destinationYaw = 0.0F;
     @ConfigValue
-    private final Float destinationPitch = 0.0F;
+    private Float destinationPitch = 0.0F;
 
     @Override
     public void onLoad(String name, PluginService service, ProtocolServiceWrapper protocol) {
@@ -51,7 +51,8 @@ public class Spawn implements Module, Listener {
 
     private Location getLocation() {
         return new Location(service.getWorld(destinationWorld), destinationX, destinationY,
-                destinationZ, destinationYaw, destinationPitch);
+                destinationZ, destinationYaw, destinationPitch
+        );
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
