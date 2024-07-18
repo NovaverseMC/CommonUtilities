@@ -16,7 +16,7 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 
 @RegisterListeners
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
-public class Spawn implements Module, Listener {
+public class SpawnTeleport implements Module, Listener {
 
     private PluginService service;
 
