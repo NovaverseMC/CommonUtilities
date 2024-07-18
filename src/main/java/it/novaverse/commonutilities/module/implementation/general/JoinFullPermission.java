@@ -1,0 +1,34 @@
+package it.novaverse.commonutilities.module.implementation.general;
+
+import it.novaverse.commonutilities.annotation.ConfigValue;
+import it.novaverse.commonutilities.annotation.RegisterListeners;
+import it.novaverse.commonutilities.module.Module;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerLoginEvent;
+
+@NoArgsConstructor(access = AccessLevel.PACKAGE)
+@RegisterListeners
+public class JoinFullPermission implements Module, Listener {
+
+    @ConfigValue
+    private Boolean enabled = true;
+
+    @Override
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    @EventHandler(priority = EventPriority.LOW)
+    public void onPlayerLogin(PlayerLoginEvent event) {
+        if (event.getResult() == PlayerLoginEvent.Result.KICK_FULL) {
+            if (event.getPlayer().hasPermission("common.joinfull")) {
+                event.setResult(PlayerLoginEvent.Result.ALLOWED);
+            }
+        }
+    }
+
+}
