@@ -36,13 +36,4 @@ public class CommandService {
             plugin.getLogger().severe("There was an error while parsing the command containers: " + e.getMessage());
         }
     }
-
-    public void registerParamterInjector() {
-        // TODO: Implement parameter injector
-    }
-
-    public void registerArgumentSupplier() {
-        // TODO: Implement argument supplier
-    }
-
 }

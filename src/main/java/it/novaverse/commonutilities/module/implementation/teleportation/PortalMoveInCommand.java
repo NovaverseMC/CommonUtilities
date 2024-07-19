@@ -15,7 +15,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import java.util.Map;
 
 @RegisterListeners
-public class HubPortalCommand implements Module, Listener {
+public class PortalMoveInCommand implements Module, Listener {
     @ConfigValue
     private Boolean enabled = false;
 

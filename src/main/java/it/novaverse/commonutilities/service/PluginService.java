@@ -3,6 +3,8 @@ package it.novaverse.commonutilities.service;
 import it.novaverse.commonutilities.CommonUtilities;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -21,8 +23,16 @@ public class PluginService {
     @NonNull
     private final CommonUtilities plugin;
 
-    public void broadcast(String message, String permission) {
-        plugin.getServer().broadcast(message, permission);
+    public void broadcast(String richMessage, String permission) {
+        plugin.getServer().broadcast(transformComponent(richMessage), permission);
+    }
+
+    public void sendMessage(CommandSender commandSender, String richMessage) {
+        commandSender.sendRichMessage(richMessage);
+    }
+
+    public Component transformComponent(String message) {
+        return MiniMessage.miniMessage().deserialize(message);
     }
 
     public void dispatchCommand(CommandSender sender, String command) {

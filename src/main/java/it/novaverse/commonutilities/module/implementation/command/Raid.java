@@ -1,11 +1,9 @@
 package it.novaverse.commonutilities.module.implementation.command;
 
 import it.novaverse.commonutilities.annotation.ConfigValue;
-import it.novaverse.commonutilities.annotation.RegisterCommands;
 import it.novaverse.commonutilities.module.Module;
 import it.novaverse.commonutilities.service.PluginService;
 import it.novaverse.commonutilities.service.ProtocolServiceWrapper;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.CommandDescription;
@@ -15,7 +13,6 @@ import org.incendo.cloud.annotations.processing.CommandContainer;
 import java.util.HashSet;
 import java.util.Set;
 
-@RegisterCommands
 @CommandContainer
 public class Raid implements Module, CommonCommand {
 
@@ -49,7 +46,7 @@ public class Raid implements Module, CommonCommand {
         raidCheckedPlayers = new HashSet<>();
 
         service.broadcast(
-                ChatColor.GREEN + "A new staff raid has started!" + "Use '/raid next' to teleport to the next player!",
+                "<green>A new staff raid has started! Use '/raid next' to teleport to the next player!",
                 "common.raid"
         );
     }
@@ -59,7 +56,7 @@ public class Raid implements Module, CommonCommand {
     @Permission("common.raid")
     public void onRaidNext(Player player) {
         if (raidCheckedPlayers == null) {
-            player.sendMessage(ChatColor.RED + "You have firstly to start a raid!");
+            service.sendMessage(player, "<red>You have firstly to start a raid!");
             return;
         }
 
@@ -69,11 +66,11 @@ public class Raid implements Module, CommonCommand {
             player.teleport(currentPlayer);
             raidCheckedPlayers.add(currentPlayer.getName());
 
-            player.sendMessage(ChatColor.YELLOW + "Teleported to " + currentPlayer.getName());
+            service.sendMessage(player, "<yellow>Teleported to " + currentPlayer.getName());
             return;
         }
 
         raidCheckedPlayers = null;
-        service.broadcast(ChatColor.GREEN + "Raid completed!", "common.raid");
+        service.broadcast("<green>Raid completed!", "common.raid");
     }
 }

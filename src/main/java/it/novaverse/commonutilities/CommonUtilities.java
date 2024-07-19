@@ -34,8 +34,8 @@ public final class CommonUtilities extends JavaPlugin {
         commands = new CommandService();
         protocol = new ProtocolServiceWrapper(this, service);
 
-        final ConfigurationSection section = config.isConfigurationSection("modules") ?
-                config.getConfigurationSection("modules") : config.createSection("modules");
+        final ConfigurationSection section = config.isConfigurationSection("modules") ? config.getConfigurationSection(
+                "modules") : config.createSection("modules");
 
         moduleManager = new ModuleManager(section, service, commands, protocol);
         moduleManager.loadInternalModules(() -> {

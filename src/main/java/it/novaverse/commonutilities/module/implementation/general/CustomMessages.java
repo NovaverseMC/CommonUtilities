@@ -3,8 +3,11 @@ package it.novaverse.commonutilities.module.implementation.general;
 import it.novaverse.commonutilities.annotation.ConfigValue;
 import it.novaverse.commonutilities.annotation.RegisterListeners;
 import it.novaverse.commonutilities.module.Module;
+import it.novaverse.commonutilities.service.PluginService;
+import it.novaverse.commonutilities.service.ProtocolServiceWrapper;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import net.kyori.adventure.text.Component;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -12,8 +15,6 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-
-import static org.bukkit.ChatColor.translateAlternateColorCodes;
 
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 @RegisterListeners
@@ -36,53 +37,65 @@ public class CustomMessages implements Module, Listener {
     @ConfigValue
     private String customIdleKickMessage = "";
 
+
+    private PluginService pluginService;
+
     @Override
     public boolean isEnabled() {
         return enabled;
     }
 
+    @Override
+    public void onLoad(String name, PluginService service, ProtocolServiceWrapper protocol) {
+        this.pluginService = service;
+    }
+
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerJoin(PlayerJoinEvent event) {
         if (hideJoinMessages) {
-            event.setJoinMessage(null);
+            event.joinMessage(null);
             return;
         }
+
         if (!customJoinMessage.isEmpty()) {
-            event.setJoinMessage(translateAlternateColorCodes('&', customJoinMessage.replace("%", event.getPlayer().getName())));
+            String replacedMessageString = customJoinMessage.replace("%", event.getPlayer().getName());
+            event.joinMessage(pluginService.transformComponent(replacedMessageString));
         }
     }
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerJoin(PlayerQuitEvent event) {
         if (hideLeaveMessages) {
-            event.setQuitMessage(null);
+            event.quitMessage(null);
             return;
         }
+
         if (!customLeaveMessage.isEmpty()) {
-            event.setQuitMessage(translateAlternateColorCodes('&', customLeaveMessage.replace("%", event.getPlayer().getName())));
+            String replacedMessageString = customLeaveMessage.replace("%", event.getPlayer().getName());
+            event.quitMessage(pluginService.transformComponent(replacedMessageString));
         }
     }
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerDeath(PlayerDeathEvent event) {
         if (hideDeathMessages) {
-            event.setDeathMessage(null);
+            event.deathMessage(null);
             return;
         }
+
         if (!customDeathMessage.isEmpty()) {
-            event.setDeathMessage(translateAlternateColorCodes('&', customDeathMessage.replace("%", event.getEntity().getName())));
+            String replacedMessageString = customDeathMessage.replace("%", event.getEntity().getName());
+            event.deathMessage(pluginService.transformComponent(replacedMessageString));
         }
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
     public void onPlayerKick(PlayerKickEvent event) {
-        if (hideLeaveMessages) {
-            event.setLeaveMessage("");
-        }
-        if (!event.getReason().contains("You have been idle for too long!")) {
-            return;
-        }
-        event.setReason(translateAlternateColorCodes('&', customIdleKickMessage.replace("%", event.getPlayer().getName())));
+        if (hideLeaveMessages) event.leaveMessage(Component.empty());
+        if (!event.reason().contains(Component.text("You have been idle for too long!"))) return;
+
+        String replacedMessageString = customIdleKickMessage.replace("%", event.getPlayer().getName());
+        event.reason(pluginService.transformComponent(replacedMessageString));
     }
 
 }

@@ -51,35 +51,6 @@ public class HideUnwantedCommands implements Module {
                         packet.getNodes().removeIf(node -> commandBlacklist.contains(node.getName()));
                     }
             );
-
-            // trying to filter out unwanted command nodes?
-            // protocol.addSendingListener(
-            //         LISTENER_ID,
-            //         ListenerPriority.HIGHEST,
-            //         PacketType.Play.Server.COMMANDS,
-            //         event -> {
-            //             if (event.getPlayer() instanceof TemporaryPlayer || event.getPlayer()
-            //                     .hasPermission("common.command.bypass")) {
-            //                 return;
-            //             }
-            //
-            //             PacketContainer packet = event.getPacket();
-            //             RootCommandNode<?> rootNode = (RootCommandNode<?>) packet.getModifier().read(0);
-            //
-            //             Map<String, CommandNode<?>> children = Maps.newLinkedHashMap();
-            //             for (CommandNode<?> node : rootNode.getChildren()) {
-            //                 if (commandBlacklist.contains(node.getName())) {
-            //                     continue;
-            //                 }
-            //                 children.put(node.getName(), node);
-            //             }
-            //             try {
-            //                 FieldUtils.writeField(rootNode, "children", children, true);
-            //             } catch (IllegalArgumentException | IllegalAccessException e) {
-            //                 log.log(Level.WARNING, "Unable to handle the Commands packet!", e);
-            //             }
-            //         }
-            // );
         });
 
         service.getPlayers().forEach(Player :: updateCommands);

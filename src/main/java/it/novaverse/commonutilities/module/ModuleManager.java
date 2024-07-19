@@ -85,11 +85,6 @@ public class ModuleManager {
                 service.registerListener((Listener) module);
             }
             
-            // TODO: Check better this command registration since cloud already parses all containers.
-            // if (module.getClass().getAnnotation(RegisterCommands.class) != null) {
-            //  commands.registerCommand((BaseCommand) module);
-            //}
-
             module.onEnable();
             log.info("Module " + entry.getKey() + " enabled!");
         }
