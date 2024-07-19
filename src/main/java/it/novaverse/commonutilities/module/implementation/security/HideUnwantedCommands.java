@@ -44,6 +44,9 @@ public class HideUnwantedCommands implements Module {
                     PacketListenerPriority.HIGHEST,
                     PacketType.Play.Server.DECLARE_COMMANDS,
                     event -> {
+                        Player player = (Player) event.getPlayer();
+                        if (player.hasPermission("common.command.bypass")) return;
+
                         WrapperPlayServerDeclareCommands packet = new WrapperPlayServerDeclareCommands(event);
                         packet.getNodes().removeIf(node -> commandBlacklist.contains(node.getName()));
                     }

@@ -17,7 +17,7 @@ import java.util.Set;
 
 @RegisterCommands
 @CommandContainer
-public class Raid implements Module {
+public class Raid implements Module, CommonCommand {
 
     private PluginService service;
 

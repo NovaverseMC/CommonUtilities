@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import org.bukkit.command.CommandSender;
 import org.incendo.cloud.annotations.AnnotationParser;
+import org.incendo.cloud.bukkit.CloudBukkitCapabilities;
 import org.incendo.cloud.execution.ExecutionCoordinator;
 import org.incendo.cloud.paper.LegacyPaperCommandManager;
 
@@ -13,13 +14,19 @@ public class CommandService {
 
     @SuppressWarnings("deprecated")
     public void register(@NonNull CommonUtilities plugin) {
-        LegacyPaperCommandManager<CommandSender> paperCommandManager = LegacyPaperCommandManager.createNative(
+        LegacyPaperCommandManager<CommandSender> commandManager = LegacyPaperCommandManager.createNative(
                 plugin,
                 ExecutionCoordinator.asyncCoordinator()
         );
 
+        if (commandManager.hasCapability(CloudBukkitCapabilities.NATIVE_BRIGADIER)) {
+            commandManager.registerBrigadier();
+        } else if (commandManager.hasCapability(CloudBukkitCapabilities.ASYNCHRONOUS_COMPLETION)) {
+            commandManager.registerAsynchronousCompletions();
+        }
+
         AnnotationParser<CommandSender> commandSenderAnnotationParser = new AnnotationParser<>(
-                paperCommandManager,
+                commandManager,
                 CommandSender.class
         );
 
@@ -33,7 +40,7 @@ public class CommandService {
     public void registerParamterInjector() {
         // TODO: Implement parameter injector
     }
-    
+
     public void registerArgumentSupplier() {
         // TODO: Implement argument supplier
     }
