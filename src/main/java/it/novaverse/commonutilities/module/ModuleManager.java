@@ -1,5 +1,8 @@
 package it.novaverse.commonutilities.module;
 
+import io.github.classgraph.ClassGraph;
+import io.github.classgraph.ClassInfo;
+import io.github.classgraph.ScanResult;
 import it.novaverse.commonutilities.annotation.RegisterListeners;
 import it.novaverse.commonutilities.service.CommandService;
 import it.novaverse.commonutilities.service.PluginService;
@@ -9,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.Listener;
-import org.reflections.Reflections;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -18,6 +20,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
+import java.util.regex.Matcher;
 
 @Log
 @RequiredArgsConstructor
@@ -35,22 +38,18 @@ public class ModuleManager {
     private final Map<String, Module> modules = new LinkedHashMap<>();
 
     public void loadInternalModules(final Runnable onDefaultSave) {
-        Reflections moduleReflection = new Reflections(getClass().getPackage().getName() + ".implementation");
-        Set<Class<? extends Module>> moduleClasses = moduleReflection.getSubTypesOf(Module.class);
-        for (Class<? extends Module> moduleClass : moduleClasses) {
-            if (moduleClass.isInterface() || Modifier.isAbstract(moduleClass.getModifiers())) {
-                continue;
-            }
-            try {
-                String moduleName = Character.toLowerCase(moduleClass.getSimpleName()
-                        .charAt(0)) + moduleClass.getSimpleName().substring(1);
-                ConfigurationSection moduleConfig = config.getConfigurationSection(moduleName);
-                if (moduleConfig == null) {
-                    moduleConfig = config.createSection(moduleName);
-                }
-                loadModule(moduleName, moduleClass, moduleConfig, onDefaultSave);
-            } catch (Exception e) {
-                log.log(Level.SEVERE, "Unable to load a module!", e);
+        String pkg = getClass().getPackage().getName() + ".implementation";
+
+        try (ScanResult scanResult = new ClassGraph().verbose().enableAllInfo().acceptPackages(pkg).scan()) {
+            for (ClassInfo routeClassInfo : scanResult.getClassesImplementing("Module")) {
+                if (routeClassInfo.isInterface() || routeClassInfo.isAbstract()) continue;
+
+                String moduleName = routeClassInfo.getSimpleName();
+                moduleName = moduleName.substring(0, 1).toLowerCase() + moduleName.substring(1);
+                ConfigurationSection moduleSection = config.getConfigurationSection(moduleName);
+                if (moduleSection == null) moduleSection = config.createSection(moduleName);
+
+                loadModule(moduleName, routeClassInfo.loadClass(Module.class), moduleSection, onDefaultSave);
             }
         }
     }
@@ -84,7 +83,7 @@ public class ModuleManager {
             if (module.getClass().getAnnotation(RegisterListeners.class) != null) {
                 service.registerListener((Listener) module);
             }
-            
+
             module.onEnable();
             log.info("Module " + entry.getKey() + " enabled!");
         }

@@ -9,6 +9,7 @@ import it.novaverse.commonutilities.service.ProtocolServiceWrapper;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.ComponentBuilder;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
@@ -37,6 +38,8 @@ public class ChatFormatRemover implements Module, Listener {
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
     public void onPlayerChat(AsyncChatEvent event) {
         if (event.getPlayer().hasPermission("bskyblockfix.chatformat")) return;
+
+
         String plainTextMessage = PlainTextComponentSerializer.plainText().serialize(event.message());
         Component newMessage = service.transformComponent(plainTextMessage).color(NamedTextColor.WHITE);
         event.message(newMessage);
