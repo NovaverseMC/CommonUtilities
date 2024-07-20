@@ -539,7 +539,7 @@ public @interface ConfigValue {
                 }
                 Map<String, String> result = new LinkedHashMap<>();
                 for (String key : mapSection.getKeys(false)) {
-                    result.put(key, configuration.getString(key));
+                    result.put(key, mapSection.getString(key));
                 }
                 return result;
             }
@@ -562,7 +562,7 @@ public @interface ConfigValue {
                 }
                 Map<String, Integer> result = new LinkedHashMap<>();
                 for (String key : mapSection.getKeys(false)) {
-                    result.put(key, configuration.getInt(key));
+                    result.put(key, mapSection.getInt(key));
                 }
                 return result;
             }
@@ -585,7 +585,7 @@ public @interface ConfigValue {
                 }
                 Map<String, Double> result = new LinkedHashMap<>();
                 for (String key : mapSection.getKeys(false)) {
-                    result.put(key, configuration.getDouble(key));
+                    result.put(key, mapSection.getDouble(key));
                 }
                 return result;
             }

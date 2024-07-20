@@ -19,7 +19,7 @@ public class PortalMoveInCommand implements Module, Listener {
     @ConfigValue
     private Boolean enabled = false;
 
-    @ConfigValue
+    @ConfigValue(type = ConfigValue.ValueType.STRING_MAP)
     private Map<String, String> portalCommand = Maps.newHashMap();
 
     @Override
