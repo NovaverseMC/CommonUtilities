@@ -6,7 +6,6 @@ description: A collection of common commands and features
 softdepend: [ packetevents ]
 api-version: '1.20'
 
-
 libraries:
   - "org.incendo:cloud-core:2.0.0-rc.2"
   - "org.incendo:cloud-annotations:2.0.0-rc.2"

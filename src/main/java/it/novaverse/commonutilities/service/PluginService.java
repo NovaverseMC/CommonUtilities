@@ -1,5 +1,7 @@
 package it.novaverse.commonutilities.service;
 
+import com.google.common.io.ByteArrayDataOutput;
+import com.google.common.io.ByteStreams;
 import it.novaverse.commonutilities.CommonUtilities;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -52,7 +54,7 @@ public class PluginService {
     }
 
     public void registerOutgoingPluginChannel(String channel) {
-        plugin.getServer().getMessenger().unregisterOutgoingPluginChannel(plugin, channel);
+        plugin.getServer().getMessenger().registerOutgoingPluginChannel(plugin, channel);
     }
 
     public void unregisterIncomingPluginChannel(String channel) {
@@ -60,7 +62,14 @@ public class PluginService {
     }
 
     public void unregisterOutgoingPluginChannel(String channel) {
-        plugin.getServer().getMessenger().registerOutgoingPluginChannel(plugin, channel);
+        plugin.getServer().getMessenger().unregisterOutgoingPluginChannel(plugin, channel);
+    }
+
+    public void connectToServer(Player player, String server) {
+        ByteArrayDataOutput out = ByteStreams.newDataOutput();
+        out.writeUTF("Connect");
+        out.writeUTF(server);
+        player.sendPluginMessage(plugin, "BungeeCord", out.toByteArray());
     }
 
     public void registerListener(@NonNull Listener listener) {

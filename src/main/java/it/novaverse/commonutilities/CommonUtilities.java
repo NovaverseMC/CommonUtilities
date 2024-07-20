@@ -62,11 +62,15 @@ public final class CommonUtilities extends JavaPlugin {
         protocol.initialize();
         commands.register(this);
         moduleManager.enableModules();
+
+        service.registerOutgoingPluginChannel("BungeeCord");
     }
 
     @Override
     public void onDisable() {
         moduleManager.disableModules();
         protocol.cleanup();
+
+        service.unregisterOutgoingPluginChannel("BungeeCord");
     }
 }

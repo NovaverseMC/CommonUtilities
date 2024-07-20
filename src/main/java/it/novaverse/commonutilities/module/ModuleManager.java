@@ -3,7 +3,10 @@ package it.novaverse.commonutilities.module;
 import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ClassInfo;
 import io.github.classgraph.ScanResult;
+import it.novaverse.commonutilities.CommonUtilities;
 import it.novaverse.commonutilities.annotation.RegisterListeners;
+import it.novaverse.commonutilities.module.implementation.command.CommonCommand;
+import it.novaverse.commonutilities.module.implementation.command.Raid;
 import it.novaverse.commonutilities.service.CommandService;
 import it.novaverse.commonutilities.service.PluginService;
 import it.novaverse.commonutilities.service.ProtocolServiceWrapper;
@@ -17,10 +20,9 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.logging.Level;
-import java.util.regex.Matcher;
 
 @Log
 @RequiredArgsConstructor
@@ -37,25 +39,36 @@ public class ModuleManager {
 
     private final Map<String, Module> modules = new LinkedHashMap<>();
 
+    @SuppressWarnings("unchecked")
     public void loadInternalModules(final Runnable onDefaultSave) {
-        String pkg = getClass().getPackage().getName() + ".implementation";
+        String pkg = CommonUtilities.class.getPackage().getName();
 
-        try (ScanResult scanResult = new ClassGraph().verbose().enableAllInfo().acceptPackages(pkg).scan()) {
-            for (ClassInfo routeClassInfo : scanResult.getClassesImplementing("Module")) {
-                if (routeClassInfo.isInterface() || routeClassInfo.isAbstract()) continue;
+        try (
+                ScanResult scanResult = new ClassGraph()
+                        .overrideClassLoaders(CommonUtilities.class.getClassLoader())
+                        .enableAllInfo()
+                        .acceptPackages(pkg)
+                        .scan()
+        ) {
+            Class<? extends Module>[] classes = scanResult.getClassesImplementing(Module.class)
+                    .loadClasses()
+                    .toArray(Class[]::new);
+            for (Class<? extends Module> clazz : classes) {
+                if (clazz.isInterface() || Modifier.isAbstract(clazz.getModifiers())) continue;
 
-                String moduleName = routeClassInfo.getSimpleName();
+                String moduleName = clazz.getSimpleName();
                 moduleName = moduleName.substring(0, 1).toLowerCase() + moduleName.substring(1);
                 ConfigurationSection moduleSection = config.getConfigurationSection(moduleName);
                 if (moduleSection == null) moduleSection = config.createSection(moduleName);
 
-                loadModule(moduleName, routeClassInfo.loadClass(Module.class), moduleSection, onDefaultSave);
+                loadModule(moduleName, clazz, moduleSection, onDefaultSave);
             }
         }
     }
 
     @SuppressWarnings("unchecked")
     public void loadModule(@NonNull final String name, @NonNull final Class<? extends Module> clazz, final ConfigurationSection config, final Runnable onDefaultSave) {
+        log.log(Level.INFO, "Loading Module: {0}", name);
         Module module;
         try {
             Constructor<? extends Module> constructor = clazz.getDeclaredConstructor();
@@ -80,8 +93,12 @@ public class ModuleManager {
             if (!module.isEnabled()) {
                 continue;
             }
+            log.info("Enabling module " + entry.getKey() + "...");
             if (module.getClass().getAnnotation(RegisterListeners.class) != null) {
                 service.registerListener((Listener) module);
+            }
+            if (module instanceof CommonCommand) {
+                commands.registerCommand((CommonCommand) module);
             }
 
             module.onEnable();

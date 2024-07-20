@@ -38,7 +38,6 @@ public class Raid implements Module, CommonCommand {
         return enabled;
     }
 
-
     @Command("raid start")
     @CommandDescription("Start a new raid")
     @Permission("common.raid")
@@ -54,19 +53,19 @@ public class Raid implements Module, CommonCommand {
     @Command("raid next")
     @CommandDescription("Continue the current raid")
     @Permission("common.raid")
-    public void onRaidNext(Player player) {
+    public void onRaidNext(Player sender) {
         if (raidCheckedPlayers == null) {
-            service.sendMessage(player, "<red>You have firstly to start a raid!");
+            service.sendMessage(sender, "<red>You have firstly to start a raid!");
             return;
         }
 
         for (Player currentPlayer : service.getPlayers()) {
             if (raidCheckedPlayers.contains(currentPlayer.getName())) continue;
 
-            player.teleport(currentPlayer);
+            sender.teleport(currentPlayer);
             raidCheckedPlayers.add(currentPlayer.getName());
 
-            service.sendMessage(player, "<yellow>Teleported to " + currentPlayer.getName());
+            service.sendMessage(sender, "<yellow>Teleported to " + currentPlayer.getName());
             return;
         }
 

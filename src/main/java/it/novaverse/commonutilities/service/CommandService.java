@@ -1,6 +1,7 @@
 package it.novaverse.commonutilities.service;
 
 import it.novaverse.commonutilities.CommonUtilities;
+import it.novaverse.commonutilities.module.implementation.command.CommonCommand;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import org.bukkit.command.CommandSender;
@@ -12,9 +13,12 @@ import org.incendo.cloud.paper.LegacyPaperCommandManager;
 @NoArgsConstructor
 public class CommandService {
 
+    private LegacyPaperCommandManager<CommandSender> commandManager;
+    private AnnotationParser<CommandSender> annotationParser;
+
     @SuppressWarnings("deprecated")
     public void register(@NonNull CommonUtilities plugin) {
-        LegacyPaperCommandManager<CommandSender> commandManager = LegacyPaperCommandManager.createNative(
+        commandManager = LegacyPaperCommandManager.createNative(
                 plugin,
                 ExecutionCoordinator.asyncCoordinator()
         );
@@ -25,15 +29,13 @@ public class CommandService {
             commandManager.registerAsynchronousCompletions();
         }
 
-        AnnotationParser<CommandSender> commandSenderAnnotationParser = new AnnotationParser<>(
+        annotationParser = new AnnotationParser<>(
                 commandManager,
                 CommandSender.class
         );
+    }
 
-        try {
-            commandSenderAnnotationParser.parseContainers(plugin.getClass().getClassLoader());
-        } catch (Exception e) {
-            plugin.getLogger().severe("There was an error while parsing the command containers: " + e.getMessage());
-        }
+    public void registerCommand(CommonCommand holder) {
+        annotationParser.parse(holder);
     }
 }
