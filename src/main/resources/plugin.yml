@@ -1,7 +1,15 @@
 name: CommonUtilities
 version: ${project.version}
-main: it.feargames.commonutilities.CommonUtilities
-authors: [sgdc3]
+main: it.novaverse.commonutilities.CommonUtilities
+authors: [ sgdc3 ]
 description: A collection of common commands and features
-softdepend: [ProtocolLib]
-api-version: '1.17'
+softdepend: [ packetevents ]
+api-version: '1.20'
+
+
+libraries:
+  - "org.incendo:cloud-core:2.0.0-rc.2"
+  - "org.incendo:cloud-annotations:2.0.0-rc.2"
+  - "org.incendo:cloud-paper:2.0.0-beta.8"
+  - "org.incendo:cloud-minecraft-extras:2.0.0-beta.8"
+  - "io.github.classgraph:classgraph:4.8.174"
