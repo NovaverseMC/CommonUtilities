@@ -20,7 +20,7 @@ public class CommandService {
     public void register(@NonNull CommonUtilities plugin) {
         commandManager = LegacyPaperCommandManager.createNative(
                 plugin,
-                ExecutionCoordinator.asyncCoordinator()
+                ExecutionCoordinator.simpleCoordinator()
         );
 
         if (commandManager.hasCapability(CloudBukkitCapabilities.NATIVE_BRIGADIER)) {
