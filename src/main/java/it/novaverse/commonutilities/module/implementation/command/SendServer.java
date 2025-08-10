@@ -3,7 +3,6 @@ package it.novaverse.commonutilities.module.implementation.command;
 import it.novaverse.commonutilities.annotation.ConfigValue;
 import it.novaverse.commonutilities.module.Module;
 import it.novaverse.commonutilities.service.PluginService;
-import it.novaverse.commonutilities.service.ProtocolServiceWrapper;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Argument;
@@ -21,7 +20,7 @@ public class SendServer implements Module, CommonCommand {
     private Boolean enabled = true;
 
     @Override
-    public void onLoad(String name, PluginService service, ProtocolServiceWrapper protocol) {
+    public void onLoad(String name, PluginService service) {
         this.service = service;
     }
 

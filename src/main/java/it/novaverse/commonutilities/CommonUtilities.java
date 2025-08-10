@@ -3,7 +3,6 @@ package it.novaverse.commonutilities;
 import it.novaverse.commonutilities.module.ModuleManager;
 import it.novaverse.commonutilities.service.CommandService;
 import it.novaverse.commonutilities.service.PluginService;
-import it.novaverse.commonutilities.service.ProtocolServiceWrapper;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -15,13 +14,11 @@ public final class CommonUtilities extends JavaPlugin {
 
     private PluginService service;
     private CommandService commands;
-    private ProtocolServiceWrapper protocol;
     private ModuleManager moduleManager;
 
     private File configFile;
 
-    @Override
-    public void onLoad() {
+    public void initialize() {
         try {
             ensureConfigCreation();
         } catch (IOException e) {
@@ -32,12 +29,11 @@ public final class CommonUtilities extends JavaPlugin {
 
         service = new PluginService(this);
         commands = new CommandService();
-        protocol = new ProtocolServiceWrapper(this, service);
 
         final ConfigurationSection section = config.isConfigurationSection("modules") ? config.getConfigurationSection(
                 "modules") : config.createSection("modules");
 
-        moduleManager = new ModuleManager(section, service, commands, protocol);
+        moduleManager = new ModuleManager(section, service, commands);
         moduleManager.loadInternalModules(() -> {
             try {
                 config.save(configFile);
@@ -59,7 +55,8 @@ public final class CommonUtilities extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        protocol.initialize();
+        initialize();
+
         commands.register(this);
         moduleManager.enableModules();
 
@@ -69,7 +66,6 @@ public final class CommonUtilities extends JavaPlugin {
     @Override
     public void onDisable() {
         moduleManager.disableModules();
-        protocol.cleanup();
 
         service.unregisterOutgoingPluginChannel("BungeeCord");
     }

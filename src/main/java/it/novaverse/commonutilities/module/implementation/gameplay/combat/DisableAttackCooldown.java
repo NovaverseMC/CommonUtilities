@@ -25,7 +25,7 @@ public class DisableAttackCooldown implements Module, Listener {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerJoin(PlayerJoinEvent event) {
-        event.getPlayer().getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(32.0D);
+        event.getPlayer().getAttribute(Attribute.ATTACK_SPEED).setBaseValue(32.0D);
     }
 
 }

@@ -4,7 +4,6 @@ import it.novaverse.commonutilities.annotation.ConfigValue;
 import it.novaverse.commonutilities.annotation.RegisterListeners;
 import it.novaverse.commonutilities.module.Module;
 import it.novaverse.commonutilities.service.PluginService;
-import it.novaverse.commonutilities.service.ProtocolServiceWrapper;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import net.kyori.adventure.text.Component;
@@ -46,7 +45,7 @@ public class CustomMessages implements Module, Listener {
     }
 
     @Override
-    public void onLoad(String name, PluginService service, ProtocolServiceWrapper protocol) {
+    public void onLoad(String name, PluginService service) {
         this.pluginService = service;
     }
 

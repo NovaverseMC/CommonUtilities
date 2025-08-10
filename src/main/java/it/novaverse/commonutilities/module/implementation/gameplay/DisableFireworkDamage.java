@@ -25,7 +25,7 @@ public class DisableFireworkDamage implements Module, Listener {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
     public void onDamageByEntity(EntityDamageByEntityEvent event) {
-        if (event.getDamager().getType() != EntityType.FIREWORK) {
+        if (event.getDamager().getType() != EntityType.FIREWORK_ROCKET) {
             return;
         }
         event.setCancelled(true);

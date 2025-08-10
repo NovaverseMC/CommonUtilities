@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableMap;
 import it.novaverse.commonutilities.annotation.ConfigValue;
 import it.novaverse.commonutilities.module.Module;
 import it.novaverse.commonutilities.service.PluginService;
-import it.novaverse.commonutilities.service.ProtocolServiceWrapper;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.bukkit.Location;
@@ -39,7 +38,7 @@ public class VoidTeleport implements Module {
     private BukkitTask task = null;
 
     @Override
-    public void onLoad(String name, PluginService service, ProtocolServiceWrapper protocol) {
+    public void onLoad(String name, PluginService service) {
         this.service = service;
     }
 

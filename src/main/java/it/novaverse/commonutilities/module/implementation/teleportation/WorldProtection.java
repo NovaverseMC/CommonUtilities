@@ -1,6 +1,5 @@
 package it.novaverse.commonutilities.module.implementation.teleportation;
 
-import com.google.common.collect.Lists;
 import it.novaverse.commonutilities.annotation.ConfigValue;
 import it.novaverse.commonutilities.annotation.RegisterListeners;
 import it.novaverse.commonutilities.module.Module;
@@ -14,13 +13,14 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
 @RegisterListeners
 public class WorldProtection implements Module, Listener {
     private static final int MAX_FOOD_LEVEL = 20;
-    private static final Function<Player, Double> MAX_HEALTH = player -> player.getAttribute(Attribute.GENERIC_MAX_HEALTH)
+    private static final Function<Player, Double> MAX_HEALTH = player -> player.getAttribute(Attribute.MAX_HEALTH)
             .getBaseValue();
 
     @ConfigValue
@@ -36,7 +36,7 @@ public class WorldProtection implements Module, Listener {
     private Boolean alwaysGod = true;
 
     @ConfigValue
-    private List<String> protectedWorlds = Lists.newArrayList();
+    private List<String> protectedWorlds = new ArrayList<>();
 
     @Override
     public boolean isEnabled() {
@@ -48,7 +48,7 @@ public class WorldProtection implements Module, Listener {
         World world = event.getBlock().getWorld();
         if (!protectedWorlds.contains(world.getName().toLowerCase())) return;
 
-        if (blockBlockPlace && !event.getPlayer().hasPermission("common.hub.build.bypass")) event.setCancelled(true);
+        if (blockBlockPlace && !event.getPlayer().hasPermission("common.protection.build.bypass")) event.setCancelled(true);
     }
 
     @EventHandler
@@ -56,7 +56,7 @@ public class WorldProtection implements Module, Listener {
         World world = event.getBlock().getWorld();
         if (!protectedWorlds.contains(world.getName().toLowerCase())) return;
 
-        if (blockBlockBreak && !event.getPlayer().hasPermission("common.hub.build.bypass")) event.setCancelled(true);
+        if (blockBlockBreak && !event.getPlayer().hasPermission("common.protection.build.bypass")) event.setCancelled(true);
     }
 
     @EventHandler
@@ -64,7 +64,7 @@ public class WorldProtection implements Module, Listener {
         World world = event.getEntity().getWorld();
         if (!protectedWorlds.contains(world.getName().toLowerCase())) return;
 
-        if (alwaysGod && !event.getEntity().hasPermission("common.hub.god.bypass")) event.setCancelled(true);
+        if (alwaysGod && !event.getEntity().hasPermission("common.protection.god.bypass")) event.setCancelled(true);
     }
 
     @EventHandler
@@ -72,7 +72,7 @@ public class WorldProtection implements Module, Listener {
         World world = event.getEntity().getWorld();
         if (!protectedWorlds.contains(world.getName().toLowerCase())) return;
 
-        if (event.getEntity() instanceof Player player && alwaysGod && !player.hasPermission("common.hub.god.bypass")) {
+        if (event.getEntity() instanceof Player player && alwaysGod && !player.hasPermission("common.protection.god.bypass")) {
             player.setFoodLevel(MAX_FOOD_LEVEL);
             player.setHealth(MAX_HEALTH.apply(player));
             event.setCancelled(true);

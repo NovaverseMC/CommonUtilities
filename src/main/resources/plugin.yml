@@ -3,12 +3,11 @@ version: ${project.version}
 main: it.novaverse.commonutilities.CommonUtilities
 authors: [ sgdc3 ]
 description: A collection of common commands and features
-softdepend: [ packetevents ]
-api-version: '1.20'
+api-version: '1.21'
 
 libraries:
-  - "org.incendo:cloud-core:2.0.0-rc.2"
-  - "org.incendo:cloud-annotations:2.0.0-rc.2"
-  - "org.incendo:cloud-paper:2.0.0-beta.8"
-  - "org.incendo:cloud-minecraft-extras:2.0.0-beta.8"
-  - "io.github.classgraph:classgraph:4.8.174"
+  - "org.incendo:cloud-core:2.0.0"
+  - "org.incendo:cloud-annotations:2.0.0"
+  - "org.incendo:cloud-paper:2.0.0-beta.11"
+  - "org.incendo:cloud-minecraft-extras:2.0.0-beta.11"
+  - "io.github.classgraph:classgraph:4.8.181"

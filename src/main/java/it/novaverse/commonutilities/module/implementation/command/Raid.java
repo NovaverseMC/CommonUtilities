@@ -3,7 +3,6 @@ package it.novaverse.commonutilities.module.implementation.command;
 import it.novaverse.commonutilities.annotation.ConfigValue;
 import it.novaverse.commonutilities.module.Module;
 import it.novaverse.commonutilities.service.PluginService;
-import it.novaverse.commonutilities.service.ProtocolServiceWrapper;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.CommandDescription;
@@ -24,7 +23,7 @@ public class Raid implements Module, CommonCommand {
     private Set<String> raidCheckedPlayers;
 
     @Override
-    public void onLoad(String name, PluginService service, ProtocolServiceWrapper protocol) {
+    public void onLoad(String name, PluginService service) {
         this.service = service;
     }
 

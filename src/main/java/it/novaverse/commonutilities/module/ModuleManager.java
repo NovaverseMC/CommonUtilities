@@ -1,15 +1,12 @@
 package it.novaverse.commonutilities.module;
 
 import io.github.classgraph.ClassGraph;
-import io.github.classgraph.ClassInfo;
 import io.github.classgraph.ScanResult;
 import it.novaverse.commonutilities.CommonUtilities;
 import it.novaverse.commonutilities.annotation.RegisterListeners;
 import it.novaverse.commonutilities.module.implementation.command.CommonCommand;
-import it.novaverse.commonutilities.module.implementation.command.Raid;
 import it.novaverse.commonutilities.service.CommandService;
 import it.novaverse.commonutilities.service.PluginService;
-import it.novaverse.commonutilities.service.ProtocolServiceWrapper;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
@@ -20,7 +17,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
@@ -34,8 +30,6 @@ public class ModuleManager {
     private PluginService service;
     @NonNull
     private CommandService commands;
-    @NonNull
-    private ProtocolServiceWrapper protocol;
 
     private final Map<String, Module> modules = new LinkedHashMap<>();
 
@@ -45,7 +39,6 @@ public class ModuleManager {
 
         try (
                 ScanResult scanResult = new ClassGraph()
-                        .overrideClassLoaders(CommonUtilities.class.getClassLoader())
                         .enableAllInfo()
                         .acceptPackages(pkg)
                         .scan()
@@ -66,7 +59,6 @@ public class ModuleManager {
         }
     }
 
-    @SuppressWarnings("unchecked")
     public void loadModule(@NonNull final String name, @NonNull final Class<? extends Module> clazz, final ConfigurationSection config, final Runnable onDefaultSave) {
         log.log(Level.INFO, "Loading Module: {0}", name);
         Module module;
@@ -82,11 +74,10 @@ public class ModuleManager {
             return;
         }
         module.injectConfig(config, onDefaultSave);
-        module.onLoad(name, service, protocol);
+        module.onLoad(name, service);
         modules.put(name, module);
     }
 
-    @SuppressWarnings("unchecked")
     public void enableModules() {
         for (Map.Entry<String, Module> entry : modules.entrySet()) {
             Module module = entry.getValue();

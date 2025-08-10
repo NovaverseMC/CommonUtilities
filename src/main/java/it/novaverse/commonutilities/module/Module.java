@@ -2,7 +2,6 @@ package it.novaverse.commonutilities.module;
 
 import it.novaverse.commonutilities.config.ConfigValueInjectable;
 import it.novaverse.commonutilities.service.PluginService;
-import it.novaverse.commonutilities.service.ProtocolServiceWrapper;
 
 public interface Module extends ConfigValueInjectable {
 
@@ -11,9 +10,8 @@ public interface Module extends ConfigValueInjectable {
      *
      * @param name     the module name
      * @param service  the plugin service
-     * @param protocol the protocol service
      */
-    default void onLoad(String name, PluginService service, ProtocolServiceWrapper protocol) {
+    default void onLoad(String name, PluginService service) {
     }
 
     /**

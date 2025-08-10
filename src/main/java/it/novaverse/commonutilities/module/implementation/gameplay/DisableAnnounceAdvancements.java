@@ -4,7 +4,6 @@ import it.novaverse.commonutilities.annotation.ConfigValue;
 import it.novaverse.commonutilities.annotation.RegisterListeners;
 import it.novaverse.commonutilities.module.Module;
 import it.novaverse.commonutilities.service.PluginService;
-import it.novaverse.commonutilities.service.ProtocolServiceWrapper;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.bukkit.GameRule;
@@ -24,7 +23,7 @@ public class DisableAnnounceAdvancements implements Module, Listener {
     private Boolean enabled = true;
 
     @Override
-    public void onLoad(String name, PluginService service, ProtocolServiceWrapper protocol) {
+    public void onLoad(String name, PluginService service) {
         this.service = service;
     }
 

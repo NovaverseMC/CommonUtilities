@@ -3,7 +3,6 @@ package it.novaverse.commonutilities.module.implementation.command;
 import it.novaverse.commonutilities.annotation.ConfigValue;
 import it.novaverse.commonutilities.module.Module;
 import it.novaverse.commonutilities.service.PluginService;
-import it.novaverse.commonutilities.service.ProtocolServiceWrapper;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Command;
@@ -32,7 +31,7 @@ public class SpawnCommand implements Module, CommonCommand {
     private Float destinationPitch = 0.0F;
 
     @Override
-    public void onLoad(String name, PluginService service, ProtocolServiceWrapper protocol) {
+    public void onLoad(String name, PluginService service) {
         this.service = service;
     }
 

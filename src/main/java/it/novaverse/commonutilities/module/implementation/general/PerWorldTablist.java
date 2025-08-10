@@ -5,7 +5,6 @@ import it.novaverse.commonutilities.annotation.ConfigValue;
 import it.novaverse.commonutilities.annotation.RegisterListeners;
 import it.novaverse.commonutilities.module.Module;
 import it.novaverse.commonutilities.service.PluginService;
-import it.novaverse.commonutilities.service.ProtocolServiceWrapper;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.bukkit.World;
@@ -30,7 +29,7 @@ public class PerWorldTablist implements Module, Listener {
     private List<String> globalWorlds = ImmutableList.of("Spawn");
 
     @Override
-    public void onLoad(String name, PluginService service, ProtocolServiceWrapper protocol) {
+    public void onLoad(String name, PluginService service) {
         this.service = service;
     }
 
