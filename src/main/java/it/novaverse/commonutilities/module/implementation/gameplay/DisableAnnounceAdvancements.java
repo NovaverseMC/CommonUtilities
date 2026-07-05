@@ -6,7 +6,7 @@ import it.novaverse.commonutilities.module.Module;
 import it.novaverse.commonutilities.service.PluginService;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.bukkit.GameRule;
+import org.bukkit.GameRules;
 import org.bukkit.World;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -45,7 +45,7 @@ public class DisableAnnounceAdvancements implements Module, Listener {
     }
 
     private void disableAnnounceAdvancements(World world) {
-        world.setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, false);
+        world.setGameRule(GameRules.SHOW_ADVANCEMENT_MESSAGES, false);
     }
 
 }

@@ -64,7 +64,7 @@ public class ModuleManager {
         Module module;
         try {
             Constructor<? extends Module> constructor = clazz.getDeclaredConstructor();
-            boolean accessible = constructor.isAccessible();
+            boolean accessible = constructor.canAccess(null);
             constructor.setAccessible(true);
             module = constructor.newInstance();
             constructor.setAccessible(accessible);

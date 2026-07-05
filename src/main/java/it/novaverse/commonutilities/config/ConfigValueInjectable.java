@@ -19,8 +19,9 @@ public interface ConfigValueInjectable {
             if (annotation == null) {
                 return;
             }
-            ConfigValue.ValueType type = annotation.type() == ConfigValue.ValueType.AUTO ?
-                    ConfigValue.ValueType.getType(field) : annotation.type();
+            ConfigValue.ValueType type = annotation.type() == ConfigValue.ValueType.AUTO
+                    ? ConfigValue.ValueType.getType(field)
+                    : annotation.type();
             if (type == null) {
                 onUnknownType(field, annotation);
                 return; // Skip unknown types
@@ -34,7 +35,7 @@ public interface ConfigValueInjectable {
                     value = FieldUtils.readField(field, this, true);
                     configuration.set(path, value);
                     if (annotation.comment().length > 0) {
-                        // TODO: comment
+                        configuration.setComments(path, Arrays.asList(annotation.comment()));
                     }
                     updated.set(true);
                 } catch (IllegalStateException | IllegalAccessException e) {

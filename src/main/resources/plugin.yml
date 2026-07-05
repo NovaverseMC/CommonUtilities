@@ -6,8 +6,8 @@ description: A collection of common commands and features
 api-version: '1.21'
 
 libraries:
-  - "org.incendo:cloud-core:2.0.0"
-  - "org.incendo:cloud-annotations:2.0.0"
-  - "org.incendo:cloud-paper:2.0.0-beta.11"
-  - "org.incendo:cloud-minecraft-extras:2.0.0-beta.11"
-  - "io.github.classgraph:classgraph:4.8.181"
+  - "org.incendo:cloud-core:${cloud.version}"
+  - "org.incendo:cloud-annotations:${cloud.version}"
+  - "org.incendo:cloud-paper:${cloud-paper.version}"
+  - "org.incendo:cloud-minecraft-extras:${cloud-minecraft-extras.version}"
+  - "io.github.classgraph:classgraph:${classgraph.version}"

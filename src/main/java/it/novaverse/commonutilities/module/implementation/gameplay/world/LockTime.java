@@ -7,7 +7,7 @@ import it.novaverse.commonutilities.module.Module;
 import it.novaverse.commonutilities.service.PluginService;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.bukkit.GameRule;
+import org.bukkit.GameRules;
 import org.bukkit.World;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -53,7 +53,7 @@ public class LockTime implements Module, Listener {
             return;
         }
         world.setTime(ticks);
-        world.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
+        world.setGameRule(GameRules.ADVANCE_TIME, false);
     }
 
 }

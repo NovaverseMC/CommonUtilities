@@ -531,7 +531,6 @@ public @interface ConfigValue {
 
         private static class ConfigDataMapString extends AbstractConfigDataMap<String, String> {
             @Override
-            @SuppressWarnings("unchecked")
             public Map<String, String> get(final ConfigurationSection configuration, final String path) {
                 ConfigurationSection mapSection = configuration.getConfigurationSection(path);
                 if (mapSection == null) {
@@ -545,7 +544,6 @@ public @interface ConfigValue {
             }
 
             @Override
-            @SuppressWarnings("unchecked")
             public Map<String, String> get(ConfigurationSection configuration, String path, Map<String, String> def) {
                 Map<String, String> result = get(configuration, path);
                 return result == null ? def : result;
@@ -554,7 +552,6 @@ public @interface ConfigValue {
 
         private static class ConfigDataMapInteger extends AbstractConfigDataMap<String, Integer> {
             @Override
-            @SuppressWarnings("unchecked")
             public Map<String, Integer> get(final ConfigurationSection configuration, final String path) {
                 ConfigurationSection mapSection = configuration.getConfigurationSection(path);
                 if (mapSection == null) {
@@ -568,7 +565,6 @@ public @interface ConfigValue {
             }
 
             @Override
-            @SuppressWarnings("unchecked")
             public Map<String, Integer> get(ConfigurationSection configuration, String path, Map<String, Integer> def) {
                 Map<String, Integer> result = get(configuration, path);
                 return result == null ? def : result;
@@ -577,7 +573,6 @@ public @interface ConfigValue {
 
         private static class ConfigDataMapDouble extends AbstractConfigDataMap<String, Double> {
             @Override
-            @SuppressWarnings("unchecked")
             public Map<String, Double> get(final ConfigurationSection configuration, final String path) {
                 ConfigurationSection mapSection = configuration.getConfigurationSection(path);
                 if (mapSection == null) {
@@ -591,7 +586,6 @@ public @interface ConfigValue {
             }
 
             @Override
-            @SuppressWarnings("unchecked")
             public Map<String, Double> get(ConfigurationSection configuration, String path, Map<String, Double> def) {
                 Map<String, Double> result = get(configuration, path);
                 return result == null ? def : result;

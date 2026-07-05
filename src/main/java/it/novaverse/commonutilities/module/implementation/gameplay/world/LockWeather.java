@@ -7,7 +7,7 @@ import it.novaverse.commonutilities.module.Module;
 import it.novaverse.commonutilities.service.PluginService;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.bukkit.GameRule;
+import org.bukkit.GameRules;
 import org.bukkit.World;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -65,7 +65,7 @@ public class LockWeather implements Module, Listener {
         world.setThundering(mode > 1);
         world.setThunderDuration(mode > 1 ? LOCK_DURATION : 0);
 
-        world.setGameRule(GameRule.DO_WEATHER_CYCLE, false);
+        world.setGameRule(GameRules.ADVANCE_WEATHER, false);
     }
 
 }

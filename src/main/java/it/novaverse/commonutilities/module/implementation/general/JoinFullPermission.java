@@ -22,6 +22,7 @@ public class JoinFullPermission implements Module, Listener {
         return enabled;
     }
 
+    @SuppressWarnings("deprecation")
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerLogin(PlayerLoginEvent event) {
         if (event.getResult() == PlayerLoginEvent.Result.KICK_FULL) {
