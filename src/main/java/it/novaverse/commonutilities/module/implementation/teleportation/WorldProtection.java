@@ -45,7 +45,7 @@ public class WorldProtection implements Module, Listener {
 
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent event) {
-        World world = event.getBlock().getWorld();
+        var world = event.getBlock().getWorld();
         if (!protectedWorlds.contains(world.getName().toLowerCase())) return;
 
         if (blockBlockPlace && !event.getPlayer().hasPermission("common.protection.build.bypass")) event.setCancelled(true);
@@ -53,7 +53,7 @@ public class WorldProtection implements Module, Listener {
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
-        World world = event.getBlock().getWorld();
+        var world = event.getBlock().getWorld();
         if (!protectedWorlds.contains(world.getName().toLowerCase())) return;
 
         if (blockBlockBreak && !event.getPlayer().hasPermission("common.protection.build.bypass")) event.setCancelled(true);
@@ -61,7 +61,7 @@ public class WorldProtection implements Module, Listener {
 
     @EventHandler
     public void onDamage(EntityDamageEvent event) {
-        World world = event.getEntity().getWorld();
+        var world = event.getEntity().getWorld();
         if (!protectedWorlds.contains(world.getName().toLowerCase())) return;
 
         if (alwaysGod && !event.getEntity().hasPermission("common.protection.god.bypass")) event.setCancelled(true);
@@ -69,7 +69,7 @@ public class WorldProtection implements Module, Listener {
 
     @EventHandler
     public void onFoodLevelChange(FoodLevelChangeEvent event) {
-        World world = event.getEntity().getWorld();
+        var world = event.getEntity().getWorld();
         if (!protectedWorlds.contains(world.getName().toLowerCase())) return;
 
         if (event.getEntity() instanceof Player player && alwaysGod && !player.hasPermission("common.protection.god.bypass")) {

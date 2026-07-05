@@ -46,7 +46,7 @@ public class VoidTeleport implements Module {
     public void onEnable() {
         task = service.timer(() -> {
             service.getPlayers().forEach(player -> {
-                Double minAllowedY = worlds.get(player.getWorld().getName());
+                var minAllowedY = worlds.get(player.getWorld().getName());
                 if (minAllowedY == null || player.getLocation().getY() >= minAllowedY) {
                     return;
                 }

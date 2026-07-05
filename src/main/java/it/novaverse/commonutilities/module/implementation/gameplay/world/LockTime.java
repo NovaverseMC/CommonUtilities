@@ -48,7 +48,7 @@ public class LockTime implements Module, Listener {
     }
 
     private void lockTime(World world) {
-        Integer ticks = worlds.get(world.getName());
+        var ticks = worlds.get(world.getName());
         if (ticks == null) {
             return;
         }

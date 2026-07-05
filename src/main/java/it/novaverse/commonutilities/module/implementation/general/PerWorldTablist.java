@@ -53,9 +53,9 @@ public class PerWorldTablist implements Module, Listener {
     }
 
     private void refresh(final Player player) {
-        final World world = player.getWorld();
+        final var world = player.getWorld();
         final boolean global = isGlobalWorld(world);
-        for (final Player current : service.getPlayers()) {
+        for (final var current : service.getPlayers()) {
             if (global) {
                 // Show if the player is in a global world
                 service.showPlayer(player, current);

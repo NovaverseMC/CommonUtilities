@@ -58,7 +58,7 @@ public class Raid implements Module, CommonCommand {
             return;
         }
 
-        for (Player currentPlayer : service.getPlayers()) {
+        for (var currentPlayer : service.getPlayers()) {
             if (raidCheckedPlayers.contains(currentPlayer.getName())) continue;
 
             sender.teleport(currentPlayer);

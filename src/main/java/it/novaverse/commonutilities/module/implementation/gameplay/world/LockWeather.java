@@ -56,7 +56,7 @@ public class LockWeather implements Module, Listener {
     }
 
     private void lockWeather(World world) {
-        Integer mode = worlds.get(world.getName());
+        var mode = worlds.get(world.getName());
         if (mode == null) {
             return;
         }

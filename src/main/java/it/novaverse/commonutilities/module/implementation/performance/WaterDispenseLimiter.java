@@ -50,7 +50,7 @@ public class WaterDispenseLimiter implements Module, Listener {
             default:
                 return;
         }
-        Long lastDispense = lastDispenseMap.get(event.getBlock().getLocation());
+        var lastDispense = lastDispenseMap.get(event.getBlock().getLocation());
         if (lastDispense == null || System.currentTimeMillis() - lastDispense > fluidDispenseCooldown) {
             lastDispenseMap.put(event.getBlock().getLocation(), System.currentTimeMillis());
             return;

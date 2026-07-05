@@ -33,8 +33,8 @@ public class ChatFormatRemover implements Module, Listener {
         if (event.getPlayer().hasPermission("common.chatformat.allow")) return;
 
 
-        String plainTextMessage = PlainTextComponentSerializer.plainText().serialize(event.message());
-        Component newMessage = service.transformComponent(plainTextMessage).color(NamedTextColor.WHITE);
+        var plainTextMessage = PlainTextComponentSerializer.plainText().serialize(event.message());
+        var newMessage = service.transformComponent(plainTextMessage).color(NamedTextColor.WHITE);
         event.message(newMessage);
     }
 

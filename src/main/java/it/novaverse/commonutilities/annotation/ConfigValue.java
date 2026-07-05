@@ -106,39 +106,39 @@ public @interface ConfigValue {
         @SuppressWarnings("Duplicates")
         public static ValueType getType(final Field field) {
             if (List.class.isAssignableFrom(field.getType())) {
-                Type typeArgument = ((ParameterizedType) field.getGenericType()).getActualTypeArguments()[0];
+                var typeArgument = ((ParameterizedType) field.getGenericType()).getActualTypeArguments()[0];
                 if (typeArgument instanceof ParameterizedType) {
                     if (Map.class.isAssignableFrom((Class<?>) ((ParameterizedType) typeArgument).getRawType())) {
                         return MAP_LIST;
                     }
-                } else for (ValueType type : values()) {
+                } else for (var type : values()) {
                     if (!type.getFamily().equals(TypeFamily.LIST)) {
                         continue;
                     }
-                    for (Class<?> typeClass : type.typeClasses) {
+                    for (var typeClass : type.typeClasses) {
                         if (typeClass.isAssignableFrom((Class<?>) typeArgument)) {
                             return type;
                         }
                     }
                 }
             } else if (Map.class.isAssignableFrom(field.getType())) {
-                Type typeArgument = ((ParameterizedType) field.getGenericType()).getActualTypeArguments()[1];
-                for (ValueType type : values()) {
+                var typeArgument = ((ParameterizedType) field.getGenericType()).getActualTypeArguments()[1];
+                for (var type : values()) {
                     if (!type.getFamily().equals(TypeFamily.MAP)) {
                         continue;
                     }
-                    for (Class<?> typeClass : type.typeClasses) {
+                    for (var typeClass : type.typeClasses) {
                         if (typeClass.isAssignableFrom((Class<?>) typeArgument)) {
                             return type;
                         }
                     }
                 }
             } else {
-                for (ValueType type : values()) {
+                for (var type : values()) {
                     if (!type.getFamily().equals(TypeFamily.PRIMITIVE)) {
                         continue;
                     }
-                    for (Class<?> typeClass : type.typeClasses) {
+                    for (var typeClass : type.typeClasses) {
                         if (typeClass.isAssignableFrom(field.getType())) {
                             return type;
                         }
@@ -172,7 +172,7 @@ public @interface ConfigValue {
             public abstract T get(ConfigurationSection configuration, String path);
 
             public T get(final ConfigurationSection configuration, final String path, final T def) {
-                T value = get(configuration, path);
+                var value = get(configuration, path);
                 return value == null ? def : value;
             }
 
@@ -191,7 +191,7 @@ public @interface ConfigValue {
 
             @Override
             public Boolean get(final ConfigurationSection configuration, final String path, final Boolean def) {
-                Object value = configuration.get(path, def);
+                var value = configuration.get(path, def);
                 if (value instanceof Boolean) {
                     return (Boolean) value;
                 } else {
@@ -214,7 +214,7 @@ public @interface ConfigValue {
 
             @Override
             public Byte get(final ConfigurationSection configuration, final String path, final Byte def) {
-                Object value = configuration.get(path);
+                var value = configuration.get(path);
                 if (value instanceof Number) {
                     return (byte) toInt(value);
                 } else {
@@ -236,7 +236,7 @@ public @interface ConfigValue {
 
             @Override
             public Short get(final ConfigurationSection configuration, final String path, final Short def) {
-                Object value = configuration.get(path);
+                var value = configuration.get(path);
                 if (value instanceof Number) {
                     return (short) toInt(value);
                 } else {
@@ -258,7 +258,7 @@ public @interface ConfigValue {
 
             @Override
             public Integer get(final ConfigurationSection configuration, final String path, final Integer def) {
-                Object value = configuration.get(path);
+                var value = configuration.get(path);
                 if (value instanceof Number) {
                     return toInt(value);
                 } else {
@@ -280,7 +280,7 @@ public @interface ConfigValue {
 
             @Override
             public Long get(final ConfigurationSection configuration, final String path, final Long def) {
-                Object value = configuration.get(path, def);
+                var value = configuration.get(path, def);
                 if (value instanceof Number) {
                     return toLong(value);
                 } else {
@@ -302,7 +302,7 @@ public @interface ConfigValue {
 
             @Override
             public Float get(final ConfigurationSection configuration, final String path, final Float def) {
-                Object value = configuration.get(path);
+                var value = configuration.get(path);
                 if (value instanceof Number) {
                     return (float) toDouble(value);
                 } else {
@@ -324,7 +324,7 @@ public @interface ConfigValue {
 
             @Override
             public Double get(final ConfigurationSection configuration, final String path, final Double def) {
-                Object value = configuration.get(path);
+                var value = configuration.get(path);
                 if (value instanceof Number) {
                     return toDouble(value);
                 } else {
@@ -346,7 +346,7 @@ public @interface ConfigValue {
 
             @Override
             public Character get(final ConfigurationSection configuration, final String path, final Character def) {
-                String value = configuration.getString(path);
+                var value = configuration.getString(path);
                 return value == null || value.isEmpty() ? def : value.charAt(0);
             }
 
@@ -532,12 +532,12 @@ public @interface ConfigValue {
         private static class ConfigDataMapString extends AbstractConfigDataMap<String, String> {
             @Override
             public Map<String, String> get(final ConfigurationSection configuration, final String path) {
-                ConfigurationSection mapSection = configuration.getConfigurationSection(path);
+                var mapSection = configuration.getConfigurationSection(path);
                 if (mapSection == null) {
                     return null;
                 }
                 Map<String, String> result = new LinkedHashMap<>();
-                for (String key : mapSection.getKeys(false)) {
+                for (var key : mapSection.getKeys(false)) {
                     result.put(key, mapSection.getString(key));
                 }
                 return result;
@@ -553,12 +553,12 @@ public @interface ConfigValue {
         private static class ConfigDataMapInteger extends AbstractConfigDataMap<String, Integer> {
             @Override
             public Map<String, Integer> get(final ConfigurationSection configuration, final String path) {
-                ConfigurationSection mapSection = configuration.getConfigurationSection(path);
+                var mapSection = configuration.getConfigurationSection(path);
                 if (mapSection == null) {
                     return null;
                 }
                 Map<String, Integer> result = new LinkedHashMap<>();
-                for (String key : mapSection.getKeys(false)) {
+                for (var key : mapSection.getKeys(false)) {
                     result.put(key, mapSection.getInt(key));
                 }
                 return result;
@@ -574,12 +574,12 @@ public @interface ConfigValue {
         private static class ConfigDataMapDouble extends AbstractConfigDataMap<String, Double> {
             @Override
             public Map<String, Double> get(final ConfigurationSection configuration, final String path) {
-                ConfigurationSection mapSection = configuration.getConfigurationSection(path);
+                var mapSection = configuration.getConfigurationSection(path);
                 if (mapSection == null) {
                     return null;
                 }
                 Map<String, Double> result = new LinkedHashMap<>();
-                for (String key : mapSection.getKeys(false)) {
+                for (var key : mapSection.getKeys(false)) {
                     result.put(key, mapSection.getDouble(key));
                 }
                 return result;

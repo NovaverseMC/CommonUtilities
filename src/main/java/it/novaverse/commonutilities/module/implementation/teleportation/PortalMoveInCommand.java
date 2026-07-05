@@ -33,16 +33,16 @@ public class PortalMoveInCommand implements Module, Listener {
             return;
         }
 
-        Block block = event.getTo().getBlock();
-        Material material = block.getType();
+        var block = event.getTo().getBlock();
+        var material = block.getType();
         boolean portalBlock = material.name().toLowerCase().contains("portal");
 
         if (!portalBlock) return;
 
-        String command = portalCommand.get(material.name().toLowerCase());
+        var command = portalCommand.get(material.name().toLowerCase());
         if (command == null) return;
 
-        String patchedCommand = command.replace("%player%", event.getPlayer().getName());
+        var patchedCommand = command.replace("%player%", event.getPlayer().getName());
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), patchedCommand);
     }
 

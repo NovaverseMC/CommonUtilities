@@ -25,7 +25,7 @@ public final class CommonUtilities extends JavaPlugin {
             getLogger().severe("Unable to create the default config file! " + e.getMessage());
         }
 
-        final YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+        final var config = YamlConfiguration.loadConfiguration(configFile);
 
         service = new PluginService(this);
         commands = new CommandService();

@@ -61,7 +61,7 @@ public class DisableCrafting implements Module, Listener {
             return;
         }
 
-        InventoryType invType = event.getInventory().getType();
+        var invType = event.getInventory().getType();
 
         // Skip villager trading
         if (invType == InventoryType.MERCHANT) {
@@ -78,14 +78,14 @@ public class DisableCrafting implements Module, Listener {
             return;
         }
 
-        ItemStack item = event.getCurrentItem();
+        var item = event.getCurrentItem();
         if (item == null || item.getType() == Material.AIR) {
             return;
         }
 
-        Player player = (Player) event.getWhoClicked();
-        Material material = item.getType();
-        String matName = material.name();
+        var player = (Player) event.getWhoClicked();
+        var material = item.getType();
+        var matName = material.name();
 
         // Check general bypass permission or material-specific bypass permission
         if (player.hasPermission("common.bypass.craft") || player.hasPermission("common.bypass.craft." + matName.toLowerCase())) {
@@ -114,7 +114,7 @@ public class DisableCrafting implements Module, Listener {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onPrepareCraft(PrepareItemCraftEvent event) {
-        ItemStack result = event.getInventory().getResult();
+        var result = event.getInventory().getResult();
         if (result == null || result.getType() == Material.AIR) {
             return;
         }
@@ -126,7 +126,7 @@ public class DisableCrafting implements Module, Listener {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onPrepareResult(PrepareInventoryResultEvent event) {
-        ItemStack result = event.getResult();
+        var result = event.getResult();
         if (result == null || result.getType() == Material.AIR) {
             return;
         }
@@ -137,7 +137,7 @@ public class DisableCrafting implements Module, Listener {
     }
 
     private boolean shouldBlock(Material material, List<HumanEntity> viewers) {
-        String matName = material.name();
+        var matName = material.name();
         boolean blocked = false;
 
         // Check blacklist
@@ -152,7 +152,7 @@ public class DisableCrafting implements Module, Listener {
 
         if (blocked) {
             // If at least one viewer has bypass permission, don't block
-            for (HumanEntity viewer : viewers) {
+            for (var viewer : viewers) {
                 if (viewer instanceof Player player) {
                     if (player.hasPermission("common.bypass.craft") || player.hasPermission("common.bypass.craft." + matName.toLowerCase())) {
                         return false;
@@ -166,7 +166,7 @@ public class DisableCrafting implements Module, Listener {
     }
 
     private boolean containsIgnoreCase(List<String> list, String val) {
-        for (String s : list) {
+        for (var s : list) {
             if (s.equalsIgnoreCase(val)) {
                 return true;
             }

@@ -57,7 +57,7 @@ public class CustomMessages implements Module, Listener {
         }
 
         if (!customJoinMessage.isEmpty()) {
-            String replacedMessageString = customJoinMessage.replace("%", event.getPlayer().getName());
+            var replacedMessageString = customJoinMessage.replace("%", event.getPlayer().getName());
             event.joinMessage(pluginService.transformComponent(replacedMessageString));
         }
     }
@@ -70,7 +70,7 @@ public class CustomMessages implements Module, Listener {
         }
 
         if (!customLeaveMessage.isEmpty()) {
-            String replacedMessageString = customLeaveMessage.replace("%", event.getPlayer().getName());
+            var replacedMessageString = customLeaveMessage.replace("%", event.getPlayer().getName());
             event.quitMessage(pluginService.transformComponent(replacedMessageString));
         }
     }
@@ -83,7 +83,7 @@ public class CustomMessages implements Module, Listener {
         }
 
         if (!customDeathMessage.isEmpty()) {
-            String replacedMessageString = customDeathMessage.replace("%", event.getEntity().getName());
+            var replacedMessageString = customDeathMessage.replace("%", event.getEntity().getName());
             event.deathMessage(pluginService.transformComponent(replacedMessageString));
         }
     }
@@ -93,7 +93,7 @@ public class CustomMessages implements Module, Listener {
         if (hideLeaveMessages) event.leaveMessage(Component.empty());
         if (!event.reason().contains(Component.text("You have been idle for too long!"))) return;
 
-        String replacedMessageString = customIdleKickMessage.replace("%", event.getPlayer().getName());
+        var replacedMessageString = customIdleKickMessage.replace("%", event.getPlayer().getName());
         event.reason(pluginService.transformComponent(replacedMessageString));
     }
 

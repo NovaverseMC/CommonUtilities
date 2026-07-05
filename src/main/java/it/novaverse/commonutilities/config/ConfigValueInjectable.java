@@ -13,9 +13,9 @@ public interface ConfigValueInjectable {
 
     @SuppressWarnings("unchecked")
     default void injectConfig(@NonNull final ConfigurationSection configuration, final Runnable onDefaultSave) {
-        AtomicBoolean updated = new AtomicBoolean(false);
+        var updated = new AtomicBoolean(false);
         Arrays.asList(getClass().getDeclaredFields()).forEach(field -> {
-            ConfigValue annotation = field.getAnnotation(ConfigValue.class);
+            var annotation = field.getAnnotation(ConfigValue.class);
             if (annotation == null) {
                 return;
             }
@@ -26,8 +26,8 @@ public interface ConfigValueInjectable {
                 onUnknownType(field, annotation);
                 return; // Skip unknown types
             }
-            String path = annotation.path().isEmpty() ? field.getName() : annotation.path();
-            Object value = type.getDataType().get(configuration, path, null);
+            var path = annotation.path().isEmpty() ? field.getName() : annotation.path();
+            var value = type.getDataType().get(configuration, path, null);
 
             // Default value
             if (value == null) {

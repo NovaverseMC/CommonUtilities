@@ -29,7 +29,7 @@ public class DisableAnnounceAdvancements implements Module, Listener {
 
     @Override
     public void onEnable() {
-        for (World world : service.getWorlds()) {
+        for (var world : service.getWorlds()) {
             disableAnnounceAdvancements(world);
         }
     }

@@ -35,7 +35,7 @@ public class ModuleManager {
 
     @SuppressWarnings("unchecked")
     public void loadInternalModules(final Runnable onDefaultSave) {
-        String pkg = CommonUtilities.class.getPackage().getName();
+        var pkg = CommonUtilities.class.getPackage().getName();
 
         try (
                 ScanResult scanResult = new ClassGraph()
@@ -49,9 +49,9 @@ public class ModuleManager {
             for (Class<? extends Module> clazz : classes) {
                 if (clazz.isInterface() || Modifier.isAbstract(clazz.getModifiers())) continue;
 
-                String moduleName = clazz.getSimpleName();
+                var moduleName = clazz.getSimpleName();
                 moduleName = moduleName.substring(0, 1).toLowerCase() + moduleName.substring(1);
-                ConfigurationSection moduleSection = config.getConfigurationSection(moduleName);
+                var moduleSection = config.getConfigurationSection(moduleName);
                 if (moduleSection == null) moduleSection = config.createSection(moduleName);
 
                 loadModule(moduleName, clazz, moduleSection, onDefaultSave);
@@ -80,7 +80,7 @@ public class ModuleManager {
 
     public void enableModules() {
         for (Map.Entry<String, Module> entry : modules.entrySet()) {
-            Module module = entry.getValue();
+            var module = entry.getValue();
             if (!module.isEnabled()) {
                 continue;
             }

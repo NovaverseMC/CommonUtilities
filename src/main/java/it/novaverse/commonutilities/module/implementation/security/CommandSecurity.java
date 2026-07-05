@@ -48,14 +48,14 @@ public class CommandSecurity implements Module, Listener {
     @Override
     public void onEnable() {
         hashBlacklist = new LinkedHashSet<>(commandBlacklist);
-        for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+        for (var onlinePlayer : Bukkit.getOnlinePlayers()) {
             onlinePlayer.updateCommands();
         }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerCommandSend(PlayerCommandSendEvent event) {
-        Player player = event.getPlayer();
+        var player = event.getPlayer();
         if (player.hasPermission("common.command.bypass")) {
             return;
         }
@@ -64,15 +64,15 @@ public class CommandSecurity implements Module, Listener {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
     public void onPlayerCommand(PlayerCommandPreprocessEvent event) {
-        Player player = event.getPlayer();
+        var player = event.getPlayer();
 
         if (player.hasPermission("common.command.bypass")) {
             return;
         }
 
-        String message = event.getMessage();
+        var message = event.getMessage();
         String[] components = message.split(" ");
-        String label = components[0];
+        var label = components[0];
 
         if (preventHiddenSyntax) {
             if (label.contains(":")) {
@@ -82,7 +82,7 @@ public class CommandSecurity implements Module, Listener {
             }
         }
 
-        for (String currentCommand : commandBlacklist) {
+        for (var currentCommand : commandBlacklist) {
             if (label.equalsIgnoreCase("/" + currentCommand)) {
                 player.sendMessage(MiniMessage.miniMessage().deserialize(blacklistMessage));
                 event.setCancelled(true);

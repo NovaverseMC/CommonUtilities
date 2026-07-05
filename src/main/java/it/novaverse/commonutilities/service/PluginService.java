@@ -66,7 +66,7 @@ public class PluginService {
     }
 
     public void connectToServer(Player player, String server) {
-        ByteArrayDataOutput out = ByteStreams.newDataOutput();
+        var out = ByteStreams.newDataOutput();
         out.writeUTF("Connect");
         out.writeUTF(server);
         player.sendPluginMessage(plugin, "BungeeCord", out.toByteArray());
