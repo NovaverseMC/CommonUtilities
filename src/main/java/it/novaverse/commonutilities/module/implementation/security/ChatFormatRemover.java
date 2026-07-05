@@ -7,7 +7,6 @@ import it.novaverse.commonutilities.module.Module;
 import it.novaverse.commonutilities.service.PluginService;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.event.EventHandler;
