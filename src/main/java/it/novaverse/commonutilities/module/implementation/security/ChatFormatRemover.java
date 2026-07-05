@@ -29,8 +29,9 @@ public class ChatFormatRemover implements Module, Listener {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
     public void onPlayerChat(AsyncChatEvent event) {
-        if (event.getPlayer().hasPermission("common.chatformat.allow")) return;
-
+        if (event.getPlayer().hasPermission("common.chatformat.allow")) {
+            return;
+        }
 
         var plainTextMessage = PlainTextComponentSerializer.plainText().serialize(event.message());
         var newMessage = service.transformComponent(plainTextMessage).color(NamedTextColor.WHITE);

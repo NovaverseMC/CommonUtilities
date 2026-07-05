@@ -30,7 +30,7 @@ public final class CommonUtilities extends JavaPlugin {
         service = new PluginService(this);
         commands = new CommandService();
 
-        final ConfigurationSection section = config.isConfigurationSection("modules") ? config.getConfigurationSection(
+        final var section = config.isConfigurationSection("modules") ? config.getConfigurationSection(
                 "modules") : config.createSection("modules");
 
         moduleManager = new ModuleManager(section, service, commands);
@@ -44,7 +44,9 @@ public final class CommonUtilities extends JavaPlugin {
     }
 
     private void ensureConfigCreation() throws IOException {
-        if (!getDataFolder().exists()) getDataFolder().mkdirs();
+        if (!getDataFolder().exists()) {
+            getDataFolder().mkdirs();
+        }
         configFile = new File(getDataFolder(), "config.yml");
 
         if (!configFile.exists()) {

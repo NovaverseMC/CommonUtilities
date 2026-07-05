@@ -38,38 +38,42 @@ public class ModuleManager {
         var pkg = CommonUtilities.class.getPackage().getName();
 
         try (
-                ScanResult scanResult = new ClassGraph()
+                var scanResult = new ClassGraph()
                         .enableAllInfo()
                         .acceptPackages(pkg)
-                        .scan()
-        ) {
-            Class<? extends Module>[] classes = scanResult.getClassesImplementing(Module.class)
+                        .scan()) {
+            var classes = scanResult.getClassesImplementing(Module.class)
                     .loadClasses()
                     .toArray(Class[]::new);
-            for (Class<? extends Module> clazz : classes) {
-                if (clazz.isInterface() || Modifier.isAbstract(clazz.getModifiers())) continue;
+            for (var clazz : classes) {
+                if (clazz.isInterface() || Modifier.isAbstract(clazz.getModifiers())) {
+                    continue;
+                }
 
                 var moduleName = clazz.getSimpleName();
                 moduleName = moduleName.substring(0, 1).toLowerCase() + moduleName.substring(1);
                 var moduleSection = config.getConfigurationSection(moduleName);
-                if (moduleSection == null) moduleSection = config.createSection(moduleName);
+                if (moduleSection == null) {
+                    moduleSection = config.createSection(moduleName);
+                }
 
                 loadModule(moduleName, clazz, moduleSection, onDefaultSave);
             }
         }
     }
 
-    public void loadModule(@NonNull final String name, @NonNull final Class<? extends Module> clazz, final ConfigurationSection config, final Runnable onDefaultSave) {
+    public void loadModule(@NonNull final String name, @NonNull final Class<? extends Module> clazz,
+            final ConfigurationSection config, final Runnable onDefaultSave) {
         log.log(Level.INFO, "Loading Module: {0}", name);
         Module module;
         try {
-            Constructor<? extends Module> constructor = clazz.getDeclaredConstructor();
-            boolean accessible = constructor.canAccess(null);
+            var constructor = clazz.getDeclaredConstructor();
+            var accessible = constructor.canAccess(null);
             constructor.setAccessible(true);
             module = constructor.newInstance();
             constructor.setAccessible(accessible);
-        } catch (NoSuchMethodException | IllegalAccessException | InstantiationException |
-                 InvocationTargetException e) {
+        } catch (NoSuchMethodException | IllegalAccessException | InstantiationException
+                | InvocationTargetException e) {
             log.log(Level.SEVERE, "Unable to construct module " + name + "!", e);
             return;
         }
@@ -79,7 +83,7 @@ public class ModuleManager {
     }
 
     public void enableModules() {
-        for (Map.Entry<String, Module> entry : modules.entrySet()) {
+        for (var entry : modules.entrySet()) {
             var module = entry.getValue();
             if (!module.isEnabled()) {
                 continue;

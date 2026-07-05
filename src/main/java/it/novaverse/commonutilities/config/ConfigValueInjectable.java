@@ -19,7 +19,7 @@ public interface ConfigValueInjectable {
             if (annotation == null) {
                 return;
             }
-            ConfigValue.ValueType type = annotation.type() == ConfigValue.ValueType.AUTO
+            var type = annotation.type() == ConfigValue.ValueType.AUTO
                     ? ConfigValue.ValueType.getType(field)
                     : annotation.type();
             if (type == null) {

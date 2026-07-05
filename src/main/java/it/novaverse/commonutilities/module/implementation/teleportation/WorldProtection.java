@@ -45,33 +45,48 @@ public class WorldProtection implements Module, Listener {
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent event) {
         var world = event.getBlock().getWorld();
-        if (!protectedWorlds.contains(world.getName().toLowerCase())) return;
+        if (!protectedWorlds.contains(world.getName().toLowerCase())) {
+            return;
+        }
 
-        if (blockBlockPlace && !event.getPlayer().hasPermission("common.protection.build.bypass")) event.setCancelled(true);
+        if (blockBlockPlace && !event.getPlayer().hasPermission("common.protection.build.bypass")) {
+            event.setCancelled(true);
+        }
     }
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
         var world = event.getBlock().getWorld();
-        if (!protectedWorlds.contains(world.getName().toLowerCase())) return;
+        if (!protectedWorlds.contains(world.getName().toLowerCase())) {
+            return;
+        }
 
-        if (blockBlockBreak && !event.getPlayer().hasPermission("common.protection.build.bypass")) event.setCancelled(true);
+        if (blockBlockBreak && !event.getPlayer().hasPermission("common.protection.build.bypass")) {
+            event.setCancelled(true);
+        }
     }
 
     @EventHandler
     public void onDamage(EntityDamageEvent event) {
         var world = event.getEntity().getWorld();
-        if (!protectedWorlds.contains(world.getName().toLowerCase())) return;
+        if (!protectedWorlds.contains(world.getName().toLowerCase())) {
+            return;
+        }
 
-        if (alwaysGod && !event.getEntity().hasPermission("common.protection.god.bypass")) event.setCancelled(true);
+        if (alwaysGod && !event.getEntity().hasPermission("common.protection.god.bypass")) {
+            event.setCancelled(true);
+        }
     }
 
     @EventHandler
     public void onFoodLevelChange(FoodLevelChangeEvent event) {
         var world = event.getEntity().getWorld();
-        if (!protectedWorlds.contains(world.getName().toLowerCase())) return;
+        if (!protectedWorlds.contains(world.getName().toLowerCase())) {
+            return;
+        }
 
-        if (event.getEntity() instanceof Player player && alwaysGod && !player.hasPermission("common.protection.god.bypass")) {
+        if (event.getEntity() instanceof Player player && alwaysGod
+                && !player.hasPermission("common.protection.god.bypass")) {
             player.setFoodLevel(MAX_FOOD_LEVEL);
             player.setHealth(MAX_HEALTH.apply(player));
             event.setCancelled(true);

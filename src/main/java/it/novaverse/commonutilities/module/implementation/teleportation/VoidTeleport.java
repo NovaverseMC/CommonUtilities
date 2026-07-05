@@ -52,7 +52,7 @@ public class VoidTeleport implements Module {
                 }
 
                 player.setFallDistance(0); // Prevent fall damage
-                Location location = new Location(service.getWorld(destinationWorld), destinationX, destinationY,
+                var location = new Location(service.getWorld(destinationWorld), destinationX, destinationY,
                         destinationZ, destinationYaw, destinationPitch);
                 player.teleport(location);
             });

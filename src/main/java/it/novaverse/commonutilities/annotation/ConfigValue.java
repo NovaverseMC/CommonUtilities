@@ -13,7 +13,6 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,10 +20,11 @@ import java.util.Map;
 import static org.bukkit.util.NumberConversions.*;
 
 /**
- * A modified version of the CfgValue annotation class from https://github.com/JarvisCraft/EZ-Cfg
+ * A modified version of the CfgValue annotation class from
+ * https://github.com/JarvisCraft/EZ-Cfg
  * Original author: JarvisCraft
  */
-@Target({ElementType.FIELD})
+@Target({ ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ConfigValue {
 
@@ -36,7 +36,8 @@ public @interface ConfigValue {
     String path() default "";
 
     /**
-     * Type of the stored value. By default it's automatically taken from the variable to store data in.
+     * Type of the stored value. By default it's automatically taken from the
+     * variable to store data in.
      *
      * @return the type of the value
      */
@@ -111,16 +112,17 @@ public @interface ConfigValue {
                     if (Map.class.isAssignableFrom((Class<?>) ((ParameterizedType) typeArgument).getRawType())) {
                         return MAP_LIST;
                     }
-                } else for (var type : values()) {
-                    if (!type.getFamily().equals(TypeFamily.LIST)) {
-                        continue;
-                    }
-                    for (var typeClass : type.typeClasses) {
-                        if (typeClass.isAssignableFrom((Class<?>) typeArgument)) {
-                            return type;
+                } else
+                    for (var type : values()) {
+                        if (!type.getFamily().equals(TypeFamily.LIST)) {
+                            continue;
+                        }
+                        for (var typeClass : type.typeClasses) {
+                            if (typeClass.isAssignableFrom((Class<?>) typeArgument)) {
+                                return type;
+                            }
                         }
                     }
-                }
             } else if (Map.class.isAssignableFrom(field.getType())) {
                 var typeArgument = ((ParameterizedType) field.getGenericType()).getActualTypeArguments()[1];
                 for (var type : values()) {
@@ -155,7 +157,8 @@ public @interface ConfigValue {
         }
 
         /**
-         * Abstract Wrapper for all dataType required to work with various config data types.
+         * Abstract Wrapper for all dataType required to work with various config data
+         * types.
          *
          * @param <T> data type
          */
@@ -198,7 +201,6 @@ public @interface ConfigValue {
                     return def;
                 }
             }
-
 
             @Override
             public boolean isValid(final ConfigurationSection configuration, final String path) {
@@ -536,7 +538,7 @@ public @interface ConfigValue {
                 if (mapSection == null) {
                     return null;
                 }
-                Map<String, String> result = new LinkedHashMap<>();
+                var result = new LinkedHashMap<String, String>();
                 for (var key : mapSection.getKeys(false)) {
                     result.put(key, mapSection.getString(key));
                 }
@@ -557,7 +559,7 @@ public @interface ConfigValue {
                 if (mapSection == null) {
                     return null;
                 }
-                Map<String, Integer> result = new LinkedHashMap<>();
+                var result = new LinkedHashMap<String, Integer>();
                 for (var key : mapSection.getKeys(false)) {
                     result.put(key, mapSection.getInt(key));
                 }
@@ -566,7 +568,7 @@ public @interface ConfigValue {
 
             @Override
             public Map<String, Integer> get(ConfigurationSection configuration, String path, Map<String, Integer> def) {
-                Map<String, Integer> result = get(configuration, path);
+                var result = get(configuration, path);
                 return result == null ? def : result;
             }
         }
@@ -578,7 +580,7 @@ public @interface ConfigValue {
                 if (mapSection == null) {
                     return null;
                 }
-                Map<String, Double> result = new LinkedHashMap<>();
+                var result = new LinkedHashMap<String, Double>();
                 for (var key : mapSection.getKeys(false)) {
                     result.put(key, mapSection.getDouble(key));
                 }
@@ -587,7 +589,7 @@ public @interface ConfigValue {
 
             @Override
             public Map<String, Double> get(ConfigurationSection configuration, String path, Map<String, Double> def) {
-                Map<String, Double> result = get(configuration, path);
+                var result = get(configuration, path);
                 return result == null ? def : result;
             }
         }
@@ -627,7 +629,8 @@ public @interface ConfigValue {
             }
 
             @Override
-            public OfflinePlayer get(final ConfigurationSection configuration, final String path, final OfflinePlayer def) {
+            public OfflinePlayer get(final ConfigurationSection configuration, final String path,
+                    final OfflinePlayer def) {
                 return configuration.getOfflinePlayer(path, def);
             }
         }
