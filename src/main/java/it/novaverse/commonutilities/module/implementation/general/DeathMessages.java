@@ -26,11 +26,11 @@ import java.util.LinkedHashMap;
 @RegisterListeners
 public class DeathMessages implements Module, Listener {
 
-    @ConfigValue
+    @ConfigValue(comment = "Enable or disable this module")
     private Boolean enabled = false;
-    @ConfigValue
+    @ConfigValue(comment = "If true, default Minecraft death messages will be hidden")
     private Boolean hideDeathMessages = false;
-    @ConfigValue
+    @ConfigValue(comment = "If true, if there is no specific override for a death cause, it will fall back to the vanilla death message instead of using the 'default' custom message.")
     private Boolean useVanillaAsFallback = false;
 
     @ConfigValue(comment = "On-demand death messages by cause. Keys are DamageCause names, 'PLAYER', 'MOB', or 'default'. Separate multiple random messages with ';'.")

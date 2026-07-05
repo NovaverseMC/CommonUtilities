@@ -16,23 +16,23 @@ public class VoidTeleport implements Module {
 
     private PluginService service;
 
-    @ConfigValue
+    @ConfigValue(comment = "Enable or disable this module")
     private Boolean enabled = false;
-    @ConfigValue
+    @ConfigValue(comment = "Task execution period in ticks (e.g. 5 means check every 5 ticks)")
     private Long taskPeriod = 5L;
-    @ConfigValue
+    @ConfigValue(comment = "Map of world name to minimum Y coordinate before teleporting")
     private Map<String, Double> worlds = ImmutableMap.of("world", 0.0);
-    @ConfigValue
+    @ConfigValue(comment = "The destination world name")
     private String destinationWorld = "world";
-    @ConfigValue
+    @ConfigValue(comment = "Destination X coordinate")
     private Double destinationX = 0.0;
-    @ConfigValue
+    @ConfigValue(comment = "Destination Y coordinate")
     private Double destinationY = 0.0;
-    @ConfigValue
+    @ConfigValue(comment = "Destination Z coordinate")
     private Double destinationZ = 0.0;
-    @ConfigValue
+    @ConfigValue(comment = "Destination Yaw rotation")
     private Float destinationYaw = 0.0F;
-    @ConfigValue
+    @ConfigValue(comment = "Destination Pitch rotation")
     private Float destinationPitch = 0.0F;
 
     private BukkitTask task = null;

@@ -17,7 +17,7 @@ import org.bukkit.event.Listener;
 @RegisterListeners
 public class ChatFormatRemover implements Module, Listener {
 
-    @ConfigValue
+    @ConfigValue(comment = "Enable or disable this module")
     private Boolean enabled = false;
 
     private PluginService service;

@@ -14,10 +14,10 @@ import java.util.Map;
 
 @RegisterListeners
 public class PortalMoveInCommand implements Module, Listener {
-    @ConfigValue
+    @ConfigValue(comment = "Enable or disable this module")
     private Boolean enabled = false;
 
-    @ConfigValue(type = ConfigValue.ValueType.STRING_MAP)
+    @ConfigValue(comment = "Map of portal block types to commands executed. Key is portal type (e.g. NETHER_PORTAL), value is command.", type = ConfigValue.ValueType.STRING_MAP)
     private Map<String, String> portalCommand = Maps.newHashMap();
 
     @Override

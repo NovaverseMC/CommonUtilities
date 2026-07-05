@@ -15,7 +15,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 @RegisterListeners
 public class DisableAttackCooldown implements Module, Listener {
 
-    @ConfigValue
+    @ConfigValue(comment = "Enable or disable this module")
     private Boolean enabled = false;
 
     @Override

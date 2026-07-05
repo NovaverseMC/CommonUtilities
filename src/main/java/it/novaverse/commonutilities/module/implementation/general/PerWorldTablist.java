@@ -23,9 +23,9 @@ public class PerWorldTablist implements Module, Listener {
 
     private PluginService service;
 
-    @ConfigValue
+    @ConfigValue(comment = "Enable or disable this module")
     private Boolean enabled = false;
-    @ConfigValue
+    @ConfigValue(comment = "List of worlds where the tablist is shared globally (players can see everyone)")
     private List<String> globalWorlds = ImmutableList.of("Spawn");
 
     @Override

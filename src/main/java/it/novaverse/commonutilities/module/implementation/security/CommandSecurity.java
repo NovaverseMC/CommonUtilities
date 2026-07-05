@@ -22,13 +22,13 @@ import java.util.Set;
 @RegisterListeners
 public class CommandSecurity implements Module, Listener {
 
-    @ConfigValue
+    @ConfigValue(comment = "Enable or disable this module")
     private Boolean enabled = true;
-    @ConfigValue
+    @ConfigValue(comment = "If true, commands using hidden syntax (e.g. /bukkit:plugins) are blocked")
     private Boolean preventHiddenSyntax = true;
-    @ConfigValue
+    @ConfigValue(comment = "Message sent to the player when blocked by hidden syntax check")
     private String hiddenSyntaxMessage = "<white>Unknown command.";
-    @ConfigValue
+    @ConfigValue(comment = "List of blacklisted commands")
     private List<String> commandBlacklist = Lists.newArrayList("pl",
             "plugins",
             "ver",
@@ -39,7 +39,7 @@ public class CommandSecurity implements Module, Listener {
             "kill",
             "plugman"
     );
-    @ConfigValue
+    @ConfigValue(comment = "Message sent to the player when blocked by command blacklist")
     private String blacklistMessage = "<red>You don't have the permission to perform this command!";
 
     private Set<String> hashBlacklist;

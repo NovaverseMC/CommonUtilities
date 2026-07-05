@@ -14,7 +14,7 @@ import org.bukkit.event.player.PlayerLoginEvent;
 @RegisterListeners
 public class JoinFullPermission implements Module, Listener {
 
-    @ConfigValue
+    @ConfigValue(comment = "Enable or disable this module")
     private Boolean enabled = true;
 
     @Override

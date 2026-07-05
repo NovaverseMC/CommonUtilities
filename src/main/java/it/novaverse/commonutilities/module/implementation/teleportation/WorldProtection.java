@@ -22,19 +22,19 @@ public class WorldProtection implements Module, Listener {
     private static final Function<Player, Double> MAX_HEALTH = player -> player.getAttribute(Attribute.MAX_HEALTH)
             .getBaseValue();
 
-    @ConfigValue
+    @ConfigValue(comment = "Enable or disable this module")
     private Boolean enabled = false;
 
-    @ConfigValue
+    @ConfigValue(comment = "If true, players cannot place blocks in protected worlds")
     private Boolean blockBlockPlace = true;
 
-    @ConfigValue
+    @ConfigValue(comment = "If true, players cannot break blocks in protected worlds")
     private Boolean blockBlockBreak = true;
 
-    @ConfigValue
+    @ConfigValue(comment = "If true, players will not take damage in protected worlds")
     private Boolean alwaysGod = true;
 
-    @ConfigValue
+    @ConfigValue(comment = "List of worlds where protection is active")
     private List<String> protectedWorlds = new ArrayList<>();
 
     @Override

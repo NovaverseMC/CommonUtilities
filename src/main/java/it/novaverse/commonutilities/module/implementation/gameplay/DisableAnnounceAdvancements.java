@@ -19,7 +19,7 @@ public class DisableAnnounceAdvancements implements Module, Listener {
 
     private PluginService service;
 
-    @ConfigValue
+    @ConfigValue(comment = "Enable or disable this module")
     private Boolean enabled = true;
 
     @Override

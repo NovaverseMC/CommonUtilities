@@ -25,9 +25,9 @@ public class LockWeather implements Module, Listener {
 
     private PluginService service;
 
-    @ConfigValue
+    @ConfigValue(comment = "Enable or disable this module")
     private Boolean enabled = false;
-    @ConfigValue
+    @ConfigValue(comment = "Map of world name to locked weather mode (0 = clear, 1 = downfall/rain, 2 = thunder)")
     private Map<String, Integer> worlds = ImmutableMap.of("world", 0);
 
     @Override

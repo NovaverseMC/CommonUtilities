@@ -17,11 +17,11 @@ import java.util.List;
 @RegisterListeners
 public class DisablePhysics implements Module, Listener {
 
-    @ConfigValue
+    @ConfigValue(comment = "Enable or disable this module")
     private Boolean enabled = false;
-    @ConfigValue
+    @ConfigValue(comment = "List of worlds where physics events are disabled")
     private List<String> worlds = new ArrayList<>();
-    @ConfigValue
+    @ConfigValue(comment = "If true, the worlds list acts as a whitelist. If false, it acts as a blacklist.")
     private Boolean whitelist = true;
 
     @Override

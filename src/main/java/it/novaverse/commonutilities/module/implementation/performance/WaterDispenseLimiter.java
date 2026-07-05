@@ -20,9 +20,9 @@ import java.util.Map;
 @RegisterListeners
 public class WaterDispenseLimiter implements Module, Listener {
 
-    @ConfigValue
+    @ConfigValue(comment = "Enable or disable this module")
     private Boolean enabled = false;
-    @ConfigValue
+    @ConfigValue(comment = "Cooldown in milliseconds between fluid dispense events at the same location")
     private int fluidDispenseCooldown = 10000;
 
     private Map<Location, Long> lastDispenseMap;

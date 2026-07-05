@@ -19,17 +19,17 @@ import org.bukkit.event.player.PlayerQuitEvent;
 @RegisterListeners
 public class SystemMessages implements Module, Listener {
 
-    @ConfigValue
+    @ConfigValue(comment = "Enable or disable this module")
     private Boolean enabled = false;
-    @ConfigValue
+    @ConfigValue(comment = "If true, default join messages will be hidden")
     private Boolean hideJoinMessages = false;
-    @ConfigValue
+    @ConfigValue(comment = "Custom join messages. Separate multiple random messages with ';'. Placeholders: <player>")
     private String customJoinMessage = "";
-    @ConfigValue
+    @ConfigValue(comment = "If true, default quit/kick messages will be hidden")
     private Boolean hideLeaveMessages = false;
-    @ConfigValue
+    @ConfigValue(comment = "Custom quit messages. Separate multiple random messages with ';'. Placeholders: <player>")
     private String customLeaveMessage = "";
-    @ConfigValue
+    @ConfigValue(comment = "Custom kick messages when a player is kicked for being idle/AFK. Separate multiple random messages with ';'. Placeholders: <player>")
     private String customIdleKickMessage = "";
 
     @Override

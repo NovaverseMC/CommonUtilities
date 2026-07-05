@@ -15,19 +15,19 @@ public class SpawnCommand implements Module, CommonCommand {
 
     private PluginService service;
 
-    @ConfigValue
+    @ConfigValue(comment = "Enable or disable this module")
     private Boolean enabled = true;
-    @ConfigValue
+    @ConfigValue(comment = "The destination world name")
     private String destinationWorld = "world";
-    @ConfigValue
+    @ConfigValue(comment = "Destination X coordinate")
     private Double destinationX = 0.0;
-    @ConfigValue
+    @ConfigValue(comment = "Destination Y coordinate")
     private Double destinationY = 0.0;
-    @ConfigValue
+    @ConfigValue(comment = "Destination Z coordinate")
     private Double destinationZ = 0.0;
-    @ConfigValue
+    @ConfigValue(comment = "Destination Yaw rotation")
     private Float destinationYaw = 0.0F;
-    @ConfigValue
+    @ConfigValue(comment = "Destination Pitch rotation")
     private Float destinationPitch = 0.0F;
 
     @Override
