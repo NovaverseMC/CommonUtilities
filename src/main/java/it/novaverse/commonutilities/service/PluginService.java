@@ -95,6 +95,10 @@ public class PluginService {
         return plugin.getServer().getPluginManager().isPluginEnabled(name);
     }
 
+    public boolean isPluginInstalled(String name) {
+        return plugin.getServer().getPluginManager().getPlugin(name) != null;
+    }
+
     public BukkitTask schedule(@NonNull Runnable runnable) {
         return plugin.getServer().getScheduler().runTask(plugin, runnable);
     }

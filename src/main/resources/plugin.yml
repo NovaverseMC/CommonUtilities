@@ -4,6 +4,7 @@ main: it.novaverse.commonutilities.CommonUtilities
 authors: [ sgdc3 ]
 description: A collection of common commands and features
 api-version: '1.21'
+softdepend: [ PlaceholderAPI, LuckPerms ]
 
 libraries:
   - "org.incendo:cloud-core:${cloud.version}"

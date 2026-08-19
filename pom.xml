@@ -6,7 +6,7 @@
 
     <groupId>it.novaverse</groupId>
     <artifactId>commonutilities</artifactId>
-    <version>2.5.0-SNAPSHOT</version>
+    <version>2.5.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>CommonUtilities</name>
@@ -19,6 +19,8 @@
         <cloud.version>2.0.0</cloud.version>
         <cloud-paper.version>2.0.0-beta.16</cloud-paper.version>
         <cloud-minecraft-extras.version>2.0.0-beta.15</cloud-minecraft-extras.version>
+        <luckperms.version>5.5</luckperms.version>
+        <placeholderapi.version>2.11.6</placeholderapi.version>
     </properties>
 
     <build>
@@ -51,6 +53,14 @@
         <repository>
             <id>papermc</id>
             <url>https://repo.papermc.io/repository/maven-public/</url>
+        </repository>
+        <repository>
+            <id>luckperms</id>
+            <url>https://repo.lucko.me/</url>
+        </repository>
+        <repository>
+            <id>placeholderapi</id>
+            <url>https://repo.extendedclip.com/releases/</url>
         </repository>
         <repository>
             <id>minecraft-libraries</id>
@@ -99,6 +109,24 @@
             <artifactId>cloud-minecraft-extras</artifactId>
             <version>${cloud-minecraft-extras.version}</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.luckperms</groupId>
+            <artifactId>api</artifactId>
+            <version>${luckperms.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>me.clip</groupId>
+            <artifactId>placeholderapi</artifactId>
+            <version>${placeholderapi.version}</version>
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 </project>
