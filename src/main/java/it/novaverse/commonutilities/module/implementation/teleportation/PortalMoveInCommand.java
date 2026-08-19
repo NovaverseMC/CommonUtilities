@@ -3,6 +3,7 @@ package it.novaverse.commonutilities.module.implementation.teleportation;
 import com.google.common.collect.Maps;
 import it.novaverse.commonutilities.annotation.ConfigValue;
 import it.novaverse.commonutilities.annotation.RegisterListeners;
+import it.novaverse.commonutilities.hook.PlaceholderHook;
 import it.novaverse.commonutilities.module.Module;
 import it.novaverse.commonutilities.service.PluginService;
 import org.bukkit.Bukkit;
@@ -73,15 +74,23 @@ public class PortalMoveInCommand implements Module, Listener {
 
         var patchedCommand = command.replace("%player%", player.getName());
         if (commandDelayTicks <= 0) {
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), patchedCommand);
+            dispatch(player, patchedCommand);
         } else {
             service.delayed(() -> {
                 if (!player.isOnline()) {
                     return;
                 }
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), patchedCommand);
+                dispatch(player, patchedCommand);
             }, commandDelayTicks);
         }
+    }
+
+    private void dispatch(Player player, String command) {
+        // Resolve the placeholders against the player entering the portal, if PlaceholderAPI is available
+        if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+            command = PlaceholderHook.setPlaceholders(player, command);
+        }
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
     }
 
     private void knockBack(Location from, Location to, Player player) {
