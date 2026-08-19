@@ -4,8 +4,10 @@ import com.google.common.collect.Maps;
 import it.novaverse.commonutilities.annotation.ConfigValue;
 import it.novaverse.commonutilities.annotation.RegisterListeners;
 import it.novaverse.commonutilities.module.Module;
+import it.novaverse.commonutilities.service.PluginService;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -19,6 +21,25 @@ public class PortalMoveInCommand implements Module, Listener {
 
     @ConfigValue(comment = "Map of portal block types to commands executed. Key is portal type (e.g. NETHER_PORTAL), value is command.", type = ConfigValue.ValueType.STRING_MAP)
     private Map<String, String> portalCommand = Maps.newHashMap();
+
+    @ConfigValue(comment = "If true, the player is pushed out of the portal in the direction opposite to the one they came from.")
+    private Boolean knockbackOnEnter = false;
+
+    @ConfigValue(comment = "Horizontal strength of the knockback out of the portal.")
+    private Double knockbackStrength = 0.8;
+
+    @ConfigValue(comment = "Vertical strength of the knockback out of the portal.")
+    private Double knockbackVerticalStrength = 0.3;
+
+    @ConfigValue(comment = "Delay in ticks before the command is executed. Use 0 to run it immediately.")
+    private Integer commandDelayTicks = 10;
+
+    private PluginService service;
+
+    @Override
+    public void onLoad(String name, PluginService service) {
+        this.service = service;
+    }
 
     @Override
     public boolean isEnabled() {
@@ -44,8 +65,39 @@ public class PortalMoveInCommand implements Module, Listener {
             return;
         }
 
-        var patchedCommand = command.replace("%player%", event.getPlayer().getName());
-        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), patchedCommand);
+        var player = event.getPlayer();
+
+        if (knockbackOnEnter) {
+            knockBack(event.getFrom(), event.getTo(), player);
+        }
+
+        var patchedCommand = command.replace("%player%", player.getName());
+        if (commandDelayTicks <= 0) {
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), patchedCommand);
+        } else {
+            service.delayed(() -> {
+                if (!player.isOnline()) {
+                    return;
+                }
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), patchedCommand);
+            }, commandDelayTicks);
+        }
+    }
+
+    private void knockBack(Location from, Location to, Player player) {
+        // Direction opposite to the one the player entered the portal with
+        var direction = from.toVector().subtract(to.toVector());
+        direction.setY(0);
+        if (direction.lengthSquared() == 0) {
+            // Fall back to the opposite of the facing direction
+            direction = player.getLocation().getDirection().setY(0).multiply(-1);
+            if (direction.lengthSquared() == 0) {
+                return;
+            }
+        }
+        var velocity = direction.normalize().multiply(knockbackStrength);
+        velocity.setY(knockbackVerticalStrength);
+        player.setVelocity(velocity);
     }
 
     public boolean hasWalkedFullBlock(Location from, Location to) {
